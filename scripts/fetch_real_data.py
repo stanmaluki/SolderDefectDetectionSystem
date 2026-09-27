@@ -16,9 +16,16 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+import os
 import shutil
 import urllib.request
 from PIL import Image
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv(PROJECT_ROOT / ".env")
+except ImportError:
+    pass
 
 
 def setup_real_validation_data(target_dir: str = "data/real") -> None:
@@ -68,12 +75,11 @@ def setup_real_validation_data(target_dir: str = "data/real") -> None:
         # Honest failure: Never synthesize fake "real" data
         raise RuntimeError(
             "Kaggle download unavailable or unauthenticated.\n"
-            "SolSight validates natively on procedural synthetic imagery. Real-world validation against "
-            "external benchmarks (e.g. SolDef_AI) requires authenticated Kaggle credentials.\n"
-            "To download real data:\n"
-            "  1. Place your Kaggle API key at ~/.kaggle/kaggle.json\n"
-            "  2. Re-run: python scripts/fetch_real_data.py\n"
-            "Procedural synthetic fallback has been disabled to guarantee data provenance integrity."
+            "To download real PCBA benchmark data:\n"
+            "  Option A: Set KAGGLE_USERNAME and KAGGLE_KEY in your .env file\n"
+            "  Option B: Place your kaggle.json token at ~/.kaggle/kaggle.json\n"
+            "Then re-run: python scripts/fetch_real_data.py\n"
+            "Procedural synthetic fallback is disabled to preserve data provenance integrity."
         )
 
     print("=" * 80)
