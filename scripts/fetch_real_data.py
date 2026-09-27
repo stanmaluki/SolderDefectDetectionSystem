@@ -44,7 +44,7 @@ def setup_real_validation_data(target_dir: str = "data/real") -> None:
     try:
         import kagglehub
         print("Attempting to fetch SolDef_AI via kagglehub...")
-        dataset_path = kagglehub.dataset_download("subinium/soldef-ai")
+        dataset_path = kagglehub.dataset_download("gianmaurofontana/soldef-ai-pcb-dataset-for-defect-detection")
         print(f"Downloaded SolDef_AI to: {dataset_path}")
 
         # Scan for images and sort into normal and defective
@@ -69,16 +69,22 @@ def setup_real_validation_data(target_dir: str = "data/real") -> None:
         downloaded = (normal_count > 0 and defect_count > 0)
     except Exception as e:
         print(f"Error fetching real PCBA dataset: {e}")
+        if "403" in str(e):
+            print("\n" + "!" * 80)
+            print("Kaggle returned 403 Forbidden.")
+            print("Your credentials are authenticated, but this dataset requires accepting its terms:")
+            print("  1. Open: https://www.kaggle.com/datasets/gianmaurofontana/soldef-ai-pcb-dataset-for-defect-detection")
+            print("  2. Click 'Download' (or accept terms) once in your browser while logged in.")
+            print("  3. Re-run: python scripts/fetch_real_data.py")
+            print("!" * 80 + "\n")
         downloaded = False
 
     if not downloaded:
         # Honest failure: Never synthesize fake "real" data
         raise RuntimeError(
-            "Kaggle download unavailable or unauthenticated.\n"
-            "To download real PCBA benchmark data:\n"
-            "  Option A: Set KAGGLE_USERNAME and KAGGLE_KEY in your .env file\n"
-            "  Option B: Place your kaggle.json token at ~/.kaggle/kaggle.json\n"
-            "Then re-run: python scripts/fetch_real_data.py\n"
+            "Kaggle download did not complete.\n"
+            "If credentials are configured, visit the dataset page to accept license terms:\n"
+            "  https://www.kaggle.com/datasets/gianmaurofontana/soldef-ai-pcb-dataset-for-defect-detection\n"
             "Procedural synthetic fallback is disabled to preserve data provenance integrity."
         )
 
