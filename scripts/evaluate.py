@@ -28,7 +28,7 @@ import numpy as np
 from sklearn.metrics import roc_auc_score, roc_curve
 import torch
 
-from src.model.cae import SolderCAE
+from src.model.cae import load_trained_model
 from src.inference.predict import inspect_patch
 from src.data.dataset import SolderPatchDataset
 
@@ -117,10 +117,7 @@ def run_full_evaluation(
     print(f"Global Anomaly Threshold T: {global_threshold:.4f} (selected k={config.get('selected_k', 2.5)})")
 
     # Load model
-    ckpt = torch.load(checkpoint_path, map_location=device)
-    model = SolderCAE(in_channels=3, base_channels=16).to(device)
-    model.load_state_dict(ckpt["model_state_dict"])
-    model.eval()
+    model, _ = load_trained_model(checkpoint_path, device=device)
 
     tiers = [16, 32, 64, 128]
     data_base = Path(data_dir)

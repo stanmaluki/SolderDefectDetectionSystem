@@ -30,7 +30,7 @@ import numpy as np
 from PIL import Image
 import torch
 
-from src.model.cae import SolderCAE
+from src.model.cae import load_trained_model
 from src.inference.predict import inspect_patch, create_heatmap_overlay
 
 
@@ -95,10 +95,7 @@ def run_demo(
     print(f"Using Global Threshold T: {global_t:.4f}")
 
     # Load model
-    ckpt = torch.load(checkpoint_path, map_location=device)
-    model = SolderCAE(in_channels=3, base_channels=16).to(device)
-    model.load_state_dict(ckpt["model_state_dict"])
-    model.eval()
+    model, _ = load_trained_model(checkpoint_path, device=device)
 
     out_p = Path(output_dir)
     out_p.mkdir(parents=True, exist_ok=True)

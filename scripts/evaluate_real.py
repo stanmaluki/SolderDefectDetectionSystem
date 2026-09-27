@@ -33,7 +33,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.model.cae import SolderCAE
+from src.model.cae import load_trained_model
 from src.inference.predict import inspect_patch, create_heatmap_overlay
 
 
@@ -65,10 +65,7 @@ def run_real_world_benchmark(
         raise FileNotFoundError(f"Real normal directory {norm_dir} does not exist. Run scripts/fetch_real_data.py first.")
 
     # Load model
-    model = SolderCAE(in_channels=3, base_channels=16).to(device)
-    ckpt = torch.load(checkpoint_path, map_location=device)
-    model.load_state_dict(ckpt["model_state_dict"])
-    model.eval()
+    model, _ = load_trained_model(checkpoint_path, device=device)
 
     # 1. Evaluate Real Normal Joints
     norm_images = load_patches_from_dir(norm_dir)

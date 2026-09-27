@@ -67,6 +67,8 @@ def train(
     lr: float = 1e-3,
     patience: int = 5,
     seed: int = 42,
+    in_channels: int = 3,
+    base_channels: int = 16,
 ) -> None:
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -98,7 +100,7 @@ def train(
     }
 
     # Model & Optimizer
-    model = SolderCAE(in_channels=3, base_channels=16).to(device)
+    model = SolderCAE(in_channels=in_channels, base_channels=base_channels).to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.5, patience=2, min_lr=1e-5)
 
@@ -194,6 +196,10 @@ def train(
                 "best_val_loss": best_val_loss,
                 "val_per_tier": val_per_tier,
                 "history": history,
+                "config": {
+                    "in_channels": in_channels,
+                    "base_channels": base_channels,
+                },
             }, best_ckpt_path)
             print(f"  --> Saved new best checkpoint to {best_ckpt_path} (Val Loss: {best_val_loss:.4f})")
         else:

@@ -21,6 +21,7 @@ from PIL import Image
 import torch
 
 from src.loss.ssim_loss import ssim_map
+from src.model.cae import load_trained_model
 
 
 def compute_top_k_dssim_score(dssim_map: torch.Tensor, top_pct: float = 0.05) -> float:
@@ -176,10 +177,7 @@ def main():
         print(f"Error: checkpoint {ckpt_path} not found.")
         return
 
-    model = SolderCAE(in_channels=3, base_channels=16).to(device)
-    ckpt = torch.load(ckpt_path, map_location=device)
-    model.load_state_dict(ckpt["model_state_dict"])
-    model.eval()
+    model, _ = load_trained_model(ckpt_path, device=device)
 
     # Determine input image
     if args.input:
