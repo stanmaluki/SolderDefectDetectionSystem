@@ -44,7 +44,7 @@ def setup_real_validation_data(target_dir: str = "data/real") -> None:
     try:
         import kagglehub
         print("Attempting to fetch SolDef_AI via kagglehub...")
-        dataset_path = kagglehub.dataset_download("gianmaurofontana/soldef-ai-pcb-dataset-for-defect-detection")
+        dataset_path = kagglehub.dataset_download("mauriziocalabrese/soldef-ai-pcb-dataset-for-defect-detection")
         print(f"Downloaded SolDef_AI to: {dataset_path}")
 
         # Scan for images and sort into normal and defective
