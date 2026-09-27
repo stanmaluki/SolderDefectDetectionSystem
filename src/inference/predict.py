@@ -8,7 +8,9 @@ Provides:
 
 from pathlib import Path
 from typing import Optional, Tuple, Union
+import matplotlib
 import matplotlib.cm as cm
+import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import torch
@@ -79,7 +81,7 @@ def inspect_patch(
     else:
         raise TypeError(f"Unsupported patch type: {type(patch)}")
 
-    tensor = tensor.to(device)
+    tensor = tensor.to(device).float()
 
     with torch.no_grad():
         recon = model(tensor)
@@ -125,7 +127,11 @@ def create_heatmap_overlay(
 
     # Colormap transformation on normalized DSSIM map
     norm_map = np.clip(dssim_map, 0.0, 1.0)
-    cmap = cm.get_cmap(colormap)
+    try:
+        cmap = plt.get_cmap(colormap)
+    except Exception:
+        import matplotlib
+        cmap = matplotlib.colormaps[colormap]
     rgba = cmap(norm_map)  # (H, W, 4) in [0, 1]
     heat_rgb = (rgba[..., :3] * 255.0).astype(np.uint8)
     heat_pil = Image.fromarray(heat_rgb)

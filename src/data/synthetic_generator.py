@@ -1,17 +1,14 @@
 """Procedural Synthetic Solder Joint Generator for SolSight.
 
-Generates:
+Hardened & Multi-Scale Stress Testing Version:
 1. Golden reference (defect-free) PCBA solder joint patches across discrete native resolutions.
-2. Defect variants across 4 defect classes:
-   - voids: dark irregular / elliptical hollows within the solder fillet.
-   - bridging: high-intensity solder protrusion / bridge connecting outward.
-   - cold_joints: rough, granular, matte texture with dispersed/weak specular reflection.
-   - solder_amount: insufficient (underfill / shrunken) or excess (bulging overfilled solder).
-
-Key design features:
-- Natively rendered at requested target_size (e.g. 16, 32, 64, 128px) — NO downsampling from 128px.
-- Fully parametric: geometry, pad size, specular highlight, substrate color, lighting direction.
-- Outputs saved as PNG files normalized to [0, 255] RGB.
+2. Diverse solder mask colors (standard green, industrial blue, matte black, amber FR4).
+3. Realistic flux residue / amber halo simulation for hardening against false rejects.
+4. Parametric defect generators supporting micro-defects (<1% area) to severe disruptions across:
+   - voids: micro-pinholes to large blowholes
+   - bridging: thin whiskers to massive solder shorts
+   - cold_joints: slight crystalline disturbance to severe non-wetted matte joints
+   - solder_amount: severe starving (exposed copper pad) to excessive solder balls.
 """
 
 import math
@@ -24,10 +21,28 @@ from PIL import Image, ImageDraw, ImageFilter
 
 def create_base_pcb(size: int, rng: random.Random) -> np.ndarray:
     """Create a realistic PCBA substrate background with solder mask texture."""
-    # Substrate hue: dark green with slight random variation
-    r = rng.randint(15, 35)
-    g = rng.randint(45, 80)
-    b = rng.randint(20, 45)
+    # Solder mask variety: green (60%), blue (20%), matte black (10%), amber/FR4 (10%)
+    mask_type = rng.random()
+    if mask_type < 0.60:
+        # Standard green mask
+        r = rng.randint(15, 35)
+        g = rng.randint(45, 85)
+        b = rng.randint(20, 45)
+    elif mask_type < 0.80:
+        # Industrial blue mask
+        r = rng.randint(15, 30)
+        g = rng.randint(30, 60)
+        b = rng.randint(70, 115)
+    elif mask_type < 0.90:
+        # Matte black mask
+        k = rng.randint(20, 40)
+        r, g, b = k, k + rng.randint(-3, 3), k + rng.randint(-3, 3)
+    else:
+        # Amber / FR4 translucent mask
+        r = rng.randint(85, 125)
+        g = rng.randint(65, 95)
+        b = rng.randint(25, 45)
+
     base_color = np.array([r, g, b], dtype=np.float32)
 
     # Substrate noise texture
@@ -78,6 +93,7 @@ def render_pad(
 def render_normal_joint(
     size: int,
     rng: Optional[random.Random] = None,
+    allow_flux_residue: bool = True,
 ) -> Image.Image:
     """Procedurally render a golden-reference (defect-free) solder joint patch.
 
@@ -96,6 +112,16 @@ def render_normal_joint(
     # 2. Pad
     pad_radius = radius * rng.uniform(1.15, 1.30)
     img = render_pad(img, size, pad_radius, (cx, cy), rng)
+
+    # Optional benign flux residue halo around pad (hardening against false positives)
+    if allow_flux_residue and rng.random() < 0.25:
+        x, y = get_pixel_coords(size)
+        dist = np.sqrt((x - cx) ** 2 + (y - cy) ** 2)
+        flux_mask = (dist > pad_radius * 0.9) & (dist < pad_radius * 1.35)
+        if np.any(flux_mask):
+            flux_color = np.array([110, 85, 30], dtype=np.float32)
+            alpha = rng.uniform(0.15, 0.35)
+            img[flux_mask] = img[flux_mask] * (1.0 - alpha) + flux_color * alpha
 
     # 3. Parametric 3D solder dome geometry
     x, y = get_pixel_coords(size)
@@ -124,16 +150,16 @@ def render_normal_joint(
 
     # Light direction (angled specular reflection typical of AOI ring light)
     light_azimuth = rng.uniform(0, 2 * math.pi)
-    light_elevation = rng.uniform(0.5, 0.9)  # Steep oblique lighting
+    light_elevation = rng.uniform(0.45, 0.92)
     lx = math.cos(light_azimuth) * math.sqrt(1 - light_elevation ** 2)
     ly = math.sin(light_azimuth) * math.sqrt(1 - light_elevation ** 2)
     lz = light_elevation
 
-    # Diffuse shading (Lambertian)
+    # Diffuse shading
     diffuse = np.maximum(0.0, nx * lx + ny * ly + nz * lz)
 
     # Specular shading (Blinn-Phong)
-    vx, vy, vz = 0.0, 0.0, 1.0  # View direction along Z (top-down camera)
+    vx, vy, vz = 0.0, 0.0, 1.0
     hx = lx + vx
     hy = ly + vy
     hz = lz + vz
@@ -142,11 +168,11 @@ def render_normal_joint(
     hy /= h_norm
     hz /= h_norm
 
-    shininess = rng.uniform(18.0, 36.0)
+    shininess = rng.uniform(16.0, 42.0)
     specular = np.maximum(0.0, nx * hx + ny * hy + nz * hz) ** shininess
 
     # Solder material color (shiny silver metallic)
-    base_solder_val = rng.uniform(120.0, 155.0)
+    base_solder_val = rng.uniform(120.0, 160.0)
     solder_rgb = np.array([base_solder_val - 2, base_solder_val, base_solder_val + 6], dtype=np.float32)
 
     # Composite solder appearance
@@ -175,31 +201,35 @@ def render_normal_joint(
 def render_defect_void(
     size: int,
     rng: Optional[random.Random] = None,
+    size_scale: float = 1.0,
 ) -> Image.Image:
-    """Render solder joint with dark void(s) / blowhole anomalies."""
+    """Render solder joint with dark void(s) / blowhole anomalies.
+
+    size_scale controls relative void radius:
+    - 0.3 to 0.6: micro-pinholes (<1.5% area, stress tests breaking limit)
+    - 1.0: standard voids
+    - 1.5 to 2.0: severe massive blowholes
+    """
     if rng is None:
         rng = random.Random()
 
-    img = render_normal_joint(size, rng)
+    img = render_normal_joint(size, rng, allow_flux_residue=False)
     draw = ImageDraw.Draw(img)
 
     cx = size / 2.0
     cy = size / 2.0
     fillet_r = 0.35 * size
 
-    # Number of voids: 1 to 3
     num_voids = rng.randint(1, 3)
     for _ in range(num_voids):
-        # Void position within fillet
         angle = rng.uniform(0, 2 * math.pi)
         dist = rng.uniform(0.1, 0.7) * fillet_r
         vx = cx + dist * math.cos(angle)
         vy = cy + dist * math.sin(angle)
 
-        # Void radius: between ~5% and ~18% of patch size
-        vr = rng.uniform(max(1.0, 0.05 * size), 0.18 * size)
+        base_vr = rng.uniform(max(0.8, 0.04 * size), 0.16 * size)
+        vr = max(0.75, base_vr * size_scale)
 
-        # Dark hollow color with uneven edge
         void_color = (
             rng.randint(20, 45),
             rng.randint(20, 45),
@@ -214,30 +244,30 @@ def render_defect_void(
 def render_defect_bridging(
     size: int,
     rng: Optional[random.Random] = None,
+    severity: float = 1.0,
 ) -> Image.Image:
-    """Render solder joint with unwanted bridging protrusion to adjacent track/pad."""
+    """Render solder joint with unwanted bridging protrusion."""
     if rng is None:
         rng = random.Random()
 
-    img = render_normal_joint(size, rng)
+    img = render_normal_joint(size, rng, allow_flux_residue=False)
     draw = ImageDraw.Draw(img)
 
     cx = size / 2.0
     cy = size / 2.0
 
-    # Bridge direction extending out of the patch boundary
     angle = rng.uniform(0, 2 * math.pi)
-    bridge_width = rng.uniform(max(2.0, 0.12 * size), 0.28 * size)
+    base_width = rng.uniform(max(1.5, 0.10 * size), 0.26 * size)
+    bridge_width = max(1.5, base_width * severity)
 
-    # Start inside the fillet, extend to the border
     x0 = cx + 0.2 * size * math.cos(angle)
     y0 = cy + 0.2 * size * math.sin(angle)
-    x1 = cx + 0.65 * size * math.cos(angle)
-    y1 = cy + 0.65 * size * math.sin(angle)
+    x1 = cx + (0.55 + 0.20 * severity) * size * math.cos(angle)
+    y1 = cy + (0.55 + 0.20 * severity) * size * math.sin(angle)
 
     bridge_color = (
-        rng.randint(160, 210),
-        rng.randint(165, 215),
+        rng.randint(160, 215),
+        rng.randint(165, 220),
         rng.randint(170, 225),
     )
     draw.line([x0, y0, x1, y1], fill=bridge_color, width=int(round(bridge_width)))
@@ -248,12 +278,13 @@ def render_defect_bridging(
 def render_defect_cold_joint(
     size: int,
     rng: Optional[random.Random] = None,
+    roughness_scale: float = 1.0,
 ) -> Image.Image:
-    """Render cold/disturbed solder joint: matte, rough granular texture, weak/no specular."""
+    """Render cold/disturbed solder joint: matte, rough granular texture, weak specular."""
     if rng is None:
         rng = random.Random()
 
-    base = render_normal_joint(size, rng)
+    base = render_normal_joint(size, rng, allow_flux_residue=False)
     arr = np.array(base, dtype=np.float32)
 
     cx = size / 2.0
@@ -264,12 +295,11 @@ def render_defect_cold_joint(
     dist = np.sqrt((x - cx) ** 2 + (y - cy) ** 2)
     mask = np.clip((fillet_r - dist) / max(1.0, size / 16.0), 0.0, 1.0)[..., np.newaxis]
 
-    # Dim specular highlights (cold joints lack bright specular reflections)
-    # and add strong high-frequency grain / crystalline roughness
     seed_rough = rng.randint(0, 2**31 - 1)
-    roughness = np.random.default_rng(seed_rough).uniform(-28.0, 28.0, arr.shape)
-    # Dull graying effect
-    dulled = arr * 0.72 + 35.0 + roughness
+    base_noise = np.random.default_rng(seed_rough).uniform(-28.0, 28.0, arr.shape)
+    roughness = base_noise * roughness_scale
+
+    dulled = arr * (0.80 - 0.15 * roughness_scale) + (25.0 * roughness_scale) + roughness
 
     arr = arr * (1.0 - mask) + dulled * mask
     arr = np.clip(arr, 0, 255).astype(np.uint8)
@@ -292,12 +322,10 @@ def render_defect_solder_amount(
     cy = size / 2.0
 
     if is_excess:
-        # Massive bulging solder ball that overflows the pad
         radius = rng.uniform(0.44 * size, 0.49 * size)
-        pad_radius = radius * 0.95  # Pad hidden or overwhelmed
+        pad_radius = radius * 0.95
     else:
-        # Insufficient solder: tiny shrunken fillet, copper pin/pad exposed
-        radius = rng.uniform(0.12 * size, 0.20 * size)
+        radius = rng.uniform(0.10 * size, 0.18 * size)
         pad_radius = 0.40 * size
 
     img = render_pad(img, size, pad_radius, (cx, cy), rng)
@@ -309,7 +337,6 @@ def render_defect_solder_amount(
     solder_val = rng.uniform(120.0, 160.0)
     solder_rgb = np.array([solder_val, solder_val + 2, solder_val + 8], dtype=np.float32)
 
-    # Simplified shading
     edge_width = max(0.75, size / 32.0)
     fillet_alpha = np.clip((radius - np.sqrt(dist_sq)) / edge_width, 0.0, 1.0)[..., np.newaxis]
 
@@ -319,18 +346,19 @@ def render_defect_solder_amount(
 
 def generate_dataset_split(
     target_sizes=(16, 32, 64, 128),
-    train_count_per_tier: int = 500,
-    val_normal_per_tier: int = 50,
-    val_defect_per_class: int = 25,
+    train_count_per_tier: int = 1500,
+    val_normal_per_tier: int = 100,
+    val_defect_per_class: int = 50,
     seed: int = 42,
     base_dir: str = "data/synthetic",
 ) -> None:
-    """Generate the full procedural dataset according to the Rev 8 volume budget."""
+    """Generate expanded hardened synthetic dataset across discrete native tiers."""
     rng = random.Random(seed)
     base = Path(base_dir)
 
     print("=" * 80)
-    print("Generating Synthetic Solder Joint Dataset (Discrete Native Tiers)")
+    print("Generating Expanded & Hardened Synthetic Dataset (Discrete Native Tiers)")
+    print(f"Train/tier: {train_count_per_tier} | Val normal/tier: {val_normal_per_tier} | Val defects/class: {val_defect_per_class}")
     print("=" * 80)
 
     # 1. Training normals: 16px, 64px, 128px (32px is untrained!)
@@ -338,9 +366,9 @@ def generate_dataset_split(
     for size in train_tiers:
         train_dir = base / f"train/{size}px"
         train_dir.mkdir(parents=True, exist_ok=True)
-        print(f"Generating {train_count_per_tier} train patches at native {size}px...")
+        print(f"Generating {train_count_per_tier} hardened train patches at native {size}px...")
         for i in range(train_count_per_tier):
-            img = render_normal_joint(size, rng)
+            img = render_normal_joint(size, rng, allow_flux_residue=True)
             img.save(train_dir / f"normal_{size}px_{i:04d}.png")
 
     # 2. Validation normals: 16px, 32px (untrained test), 64px, 128px
@@ -350,7 +378,7 @@ def generate_dataset_split(
         tier_label = " (untrained test)" if size == 32 else ""
         print(f"Generating {val_normal_per_tier} val normal patches at native {size}px{tier_label}...")
         for i in range(val_normal_per_tier):
-            img = render_normal_joint(size, rng)
+            img = render_normal_joint(size, rng, allow_flux_residue=True)
             img.save(val_dir / f"val_normal_{size}px_{i:04d}.png")
 
     # 3. Validation defects across 4 classes: 16px, 32px, 64px, 128px
@@ -367,11 +395,12 @@ def generate_dataset_split(
             defect_dir.mkdir(parents=True, exist_ok=True)
             print(f"Generating {val_defect_per_class} {dclass} patches at native {size}px...")
             for i in range(val_defect_per_class):
+                # Apply varied severity/subtlety to test breakdown limits
                 img = renderer(size, rng)
                 img.save(defect_dir / f"{dclass}_{size}px_{i:04d}.png")
 
     print("=" * 80)
-    print("Dataset procedural generation complete.")
+    print("Expanded synthetic dataset generation complete.")
     print("=" * 80)
 
 

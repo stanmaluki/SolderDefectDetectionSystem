@@ -102,6 +102,7 @@ def train(
     # Model & Optimizer
     model = SolderCAE(in_channels=3, base_channels=16).to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.5, patience=2, min_lr=1e-5)
 
     # History tracking
     history = {
@@ -153,6 +154,8 @@ def train(
             f"Val Loss: {val_overall:.4f} "
             f"(16px: {val_per_tier[16]:.4f}, 64px: {val_per_tier[64]:.4f}, 128px: {val_per_tier[128]:.4f})"
         )
+
+        scheduler.step(val_overall)
 
         # -------------------------------------------------------------
         # Hard Convergence Checkpoint at Epoch 10 (Rev 8 specification)
