@@ -1,0 +1,20 @@
+\frametitle{\emphred {Quick Start (3 Steps)}}
+\textbf{\large Step 1: Setup}
+    \begin{lstlisting}[language=bash, basicstyle=\tiny\ttfamily,
+                        backgroundcolor=\color{light}, frame=single]
+git clone https://github.com/stanmaluki/SolderDefectDetectionSystem
+cd SolderDefectDetectionSystem && pip install -r requirements.txt
+    \end{lstlisting}
+
+    \textbf{\large Step 2: Verify Architecture}
+    \begin{lstlisting}[language=bash, basicstyle=\tiny\ttfamily,
+                        backgroundcolor=\color{light}, frame=single]
+python scripts/shape_check.py
+    \end{lstlisting}
+
+    \textbf{\large Step 3: Run Evaluation}
+    \begin{lstlisting}[language=bash, basicstyle=\tiny\ttfamily,
+                        backgroundcolor=\color{light}, frame=single]
+python scripts/evaluate.py  # Full benchmark
+python src/inference/predict.py  # Single patch inference
+    \end{lstlisting}
