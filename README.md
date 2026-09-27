@@ -10,6 +10,7 @@ Unsupervised, resolution-agnostic convolutional autoencoder (CAE) for automatic 
 - **Unsupervised:** Trained exclusively on defect-free solder joints; flags defects as structural reconstruction failures.
 - **Resolution-Agnostic:** Fully convolutional architecture (no dense layers) running across $16\text{px}$ to $160\text{px}$ natively.
 - **Localized DSSIM Scoring:** Top-5% spatial structural dissimilarity prevents small pinholes and voids from being diluted by whole-patch averaging.
+- **Dataset Disclosure:** All training, validation, and benchmark datasets in this release are 100% procedurally synthesized from first-principles 3D optics. Commercial deployment on physical SMT lines is strictly gated on collecting site-specific PCBA calibration imagery.
 
 ---
 
@@ -125,14 +126,15 @@ jupyter notebook notebooks/demo.ipynb
 
 Evaluated on held-out test sets across trained and untrained tiers:
 
-| Tier | Type | AUROC | Cold Joint Recall | Bridging Recall | Normal Joint FPR |
+| Tier | Type | AUROC | Cold Joint Recall | Bridging Recall* | Normal Joint FPR |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **$16 \times 16$** | Trained Native Tier | **0.940** | 96.0% | 84.0% | 10.0% |
 | **$32 \times 32$** | **Untrained Zero-Shot** | **0.862** | 100.0% | 44.0% | 15.0% |
 | **$64 \times 64$** | Trained Native Tier | **0.963** | 100.0% | 90.0%* | 0.0% |
 | **$128 \times 128$**| Trained Native Tier | **0.850** | 100.0% | 88.0%* | 0.0% |
 
-*\*Under resolution-aware threshold $T_r$ in `outputs/threshold_config.json`.*
+> **Threshold Trade-off Note on Higher Resolutions:**  
+> When evaluating under a single global threshold ($T=0.1300$), recall on subtle localized defects drops at 64px and 128px ($25\%-26\%$) because $T$ is elevated by the higher normal variance of 16px joints ($\mu=0.083, \sigma=0.034$). Macro-defects (cold joints) maintain 100% recall. Under operational **resolution-aware thresholds** ($T_{64}=0.0773, T_{128}=0.0769$ in `outputs/threshold_config.json`), recall returns to **88%–90%+**. Full empirical analysis: [`docs/empirical_breaking_points.md`](docs/empirical_breaking_points.md).
 
 ---
 

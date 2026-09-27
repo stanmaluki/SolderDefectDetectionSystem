@@ -61,25 +61,20 @@ def setup_real_validation_data(target_dir: str = "data/real") -> None:
         print(f"Curated {normal_count} real normal joints and {defect_count} real defective joints.")
         downloaded = (normal_count > 0 and defect_count > 0)
     except Exception as e:
-        print(f"Note: kagglehub download unavailable or unauthenticated ({e}).")
+        print(f"Error fetching real PCBA dataset: {e}")
+        downloaded = False
 
     if not downloaded:
-        print("Creating accredited real-world benchmark validation set from public domain PCBA samples...")
-        # Synthesize realistic photorealistic PCBA macro-inspection crops to ensure complete test coverage
-        # when running in offline or unauthenticated environments
-        from src.data.synthetic_generator import render_normal_joint, render_defect_void, render_defect_bridging
-        import random
-
-        rng = random.Random(999)
-        for i in range(25):
-            # 64px real-world simulation crops with varied camera lighting
-            img_norm = render_normal_joint(64, rng)
-            img_norm.save(norm_path / f"benchmark_real_normal_{i:03d}.png")
-
-            img_def = render_defect_void(64, rng) if i % 2 == 0 else render_defect_bridging(64, rng)
-            img_def.save(def_path / f"benchmark_real_defect_{i:03d}.png")
-
-        print("Curated 25 benchmark normal joints and 25 benchmark defective joints in data/real/.")
+        # Honest failure: Never synthesize fake "real" data
+        raise RuntimeError(
+            "Kaggle download unavailable or unauthenticated.\n"
+            "SolSight validates natively on procedural synthetic imagery. Real-world validation against "
+            "external benchmarks (e.g. SolDef_AI) requires authenticated Kaggle credentials.\n"
+            "To download real data:\n"
+            "  1. Place your Kaggle API key at ~/.kaggle/kaggle.json\n"
+            "  2. Re-run: python scripts/fetch_real_data.py\n"
+            "Procedural synthetic fallback has been disabled to guarantee data provenance integrity."
+        )
 
     print("=" * 80)
     print("Real-data curation complete.")

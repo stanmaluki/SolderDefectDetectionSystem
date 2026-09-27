@@ -30,9 +30,7 @@ DIRS = [
     "data/synthetic/val_defects/solder_amount/32px",
     "data/synthetic/val_defects/solder_amount/64px",
     "data/synthetic/val_defects/solder_amount/128px",
-    # Real validation dataset
-    "data/real/normal",
-    "data/real/defective",
+
     # Outputs
     "outputs/checkpoints",
     "outputs/demo_visuals",

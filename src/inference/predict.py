@@ -191,8 +191,8 @@ def main():
         img = Image.open(img_path).convert("RGB")
     else:
         sample_candidates = [
-            Path("data/synthetic/val_defect/voids/64px/defect_voids_64px_0000.png"),
-            Path("data/synthetic/val_defect/bridging/64px/defect_bridging_64px_0000.png"),
+            Path("data/synthetic/val_defects/voids/64px/voids_64px_0000.png"),
+            Path("data/synthetic/val_defects/bridging/64px/bridging_64px_0000.png"),
             Path("data/synthetic/val_normal/64px/val_normal_64px_0000.png"),
         ]
         img_path = next((p for p in sample_candidates if p.exists()), None)

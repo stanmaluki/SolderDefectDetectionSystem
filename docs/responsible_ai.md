@@ -2,19 +2,20 @@
 
 ## 1. Data Provenance and Licensing
 
-All training datasets used in SolSight are procedurally generated via mathematical and parametric modeling of solder fillet geometry and PCBA optics.
-- **Privacy & Proprietary Protection:** No private customer Gerber files, CAD layouts, or proprietary industrial board designs are contained in the training corpus.
-- **Intellectual Property:** Procedural generation algorithms synthesize imagery directly from first-principles 3D optics (Blinn-Phong illumination, Lambertian diffuse models, and spherical geometry), avoiding copyright infringement or unauthorized web scraping.
-- **Real-World Validation Data:** Public evaluation benchmarks (such as the *SolDef_AI* solder joint defect dataset on Kaggle) are utilized exclusively under their declared academic and open research licenses with transparent citation and attribution.
+All training, validation, calibration, and test datasets in this release are **100% procedurally synthesized** via physical and mathematical modeling of 3D solder fillet geometry, multi-color solder masks, and PCBA optics.
+- **Synthetic-Procedural Pipeline:** Algorithms synthesize imagery directly from first-principles 3D optics (Blinn-Phong specular illumination, Lambertian diffuse models, and spherical/paraboloid geometry), eliminating copyright infringement, proprietary NDA exposure, or unauthorized scraping.
+- **Privacy & Proprietary Protection:** No customer Gerber files, proprietary CAD designs, or commercial PCBA schematics are contained in the training corpus.
+- **Real-World PCBA Benchmark Status (Future Work):** Real-world PCBA dataset ingestion (such as *SolDef_AI* on Kaggle) is supported via `scripts/fetch_real_data.py` only when authenticated with valid Kaggle API credentials. When unauthenticated, the script halts with a clear error. **No procedural renders are ever mislabeled or substituted for real data.** All benchmark metrics reported in this submission are derived from held-out procedural synthetic evaluation. Physical PCBA validation on a live production line remains an explicit, transparent future milestone.
 
 ---
 
 ## 2. Model Bias and Operating Limitations
 
 Because SolSight is trained in an unsupervised manner exclusively on defect-free reference samples, its internal definition of a "valid solder joint" is bounded by its training distribution:
-1. **Solder Alloy Variation:** Industrial soldering processes utilize distinct alloys (e.g. SAC305 lead-free vs. Sn63Pb37 tin-lead vs. bismuth-based low-temp alloys). Differences in alloy reflectivity, wetting angle, or grain structure not modeled during synthesis can produce elevated baseline dissimilarity.
-2. **Surface Contaminants & Flux Residue:** Harmless no-clean flux amber residue around a pad can register as structural dissimilarity if unmodeled, potentially causing false-positive flags.
-3. **Micro-Scale Resolution Bounds:** At extreme micro-scales (15–16px), the $11\times11$ Gaussian SSIM window covers over two-thirds of the patch, reducing localized spatial precision.
+1. **Synthetic-to-Real Domain Gap:** Procedural data accurately models specular curvature, pad geometry, flux residue, and structural anomalies (voids, bridges, cold joints, insufficient solder). However, live industrial lines introduce unique hardware artifacts (ring-light diffraction, dust, PCB warpage, conveyor vibration). Production readiness is strictly gated on collecting physical calibration images on the target SMT line.
+2. **Solder Alloy Variation:** Industrial soldering processes utilize distinct alloys (SAC305 lead-free vs. Sn63Pb37 tin-lead vs. low-temperature bismuth alloys). Differences in alloy reflectivity, wetting angle, or grain structure require site-specific baseline calibration.
+3. **Surface Contaminants & Flux Residue:** While benign flux halos are modeled during training to reduce false rejects, thick burnt rosin or heavy wash residue can cause elevated dissimilarity scores.
+4. **Resolution Boundaries:** As empirically documented in `docs/empirical_breaking_points.md`, patches below $16\times16$ px suffer mathematical representation collapse due to SSIM window padding and stride quantization. SMT optical systems must enforce an inspection patch floor of $\ge 16\text{px}$.
 
 These factors are documented openly as operating parameters that require site calibration rather than concealed as edge cases.
 
