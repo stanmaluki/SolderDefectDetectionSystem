@@ -1,4 +1,4 @@
-# SolSight — Solder Defect Detection System
+#  Solder Defect Detection System
 
 Unsupervised, resolution-agnostic convolutional autoencoder (CAE) engine for automatic optical inspection (AOI) of solder-joint defects on printed circuit board assemblies (PCBAs).
 
