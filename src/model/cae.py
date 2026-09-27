@@ -9,7 +9,8 @@ Architectural highlights:
 - Center-crop odd-size handling: crops decoder output back to exact input (H, W).
 """
 
-from typing import Tuple
+from pathlib import Path
+from typing import Any, Dict, Optional, Tuple, Union
 import torch
 import torch.nn as nn
 
@@ -79,3 +80,39 @@ class SolderCAE(nn.Module):
             reconstruction = reconstruction[:, :, start_h : start_h + orig_h, start_w : start_w + orig_w]
 
         return reconstruction
+
+
+def load_trained_model(
+    checkpoint_path: Union[str, Path],
+    device: Optional[Union[str, torch.device]] = None,
+    eval_mode: bool = True,
+) -> Tuple[SolderCAE, Dict[str, Any]]:
+    """Load a trained SolderCAE model from a checkpoint.
+
+    Reads architecture hyperparameters ('config') from the checkpoint dictionary
+    if present, falling back to defaults (in_channels=3, base_channels=16)
+    for backward compatibility.
+
+    Args:
+        checkpoint_path: Path to the .pt checkpoint file.
+        device: Device to place the model on. Defaults to cuda if available, else cpu.
+        eval_mode: Whether to set model.eval() upon returning.
+
+    Returns:
+        Tuple of (model, checkpoint_dict).
+    """
+    if device is None:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    elif isinstance(device, str):
+        device = torch.device(device)
+
+    ckpt = torch.load(checkpoint_path, map_location=device)
+    config = ckpt.get("config", {})
+    in_channels = config.get("in_channels", 3)
+    base_channels = config.get("base_channels", 16)
+
+    model = SolderCAE(in_channels=in_channels, base_channels=base_channels).to(device)
+    model.load_state_dict(ckpt["model_state_dict"])
+    if eval_mode:
+        model.eval()
+    return model, ckpt

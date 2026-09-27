@@ -16,8 +16,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-import argparse
-import json
 import time
 from typing import Dict, List, Tuple
 import matplotlib.pyplot as plt
@@ -69,6 +67,8 @@ def train(
     lr: float = 1e-3,
     patience: int = 5,
     seed: int = 42,
+    in_channels: int = 3,
+    base_channels: int = 16,
 ) -> None:
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -100,7 +100,7 @@ def train(
     }
 
     # Model & Optimizer
-    model = SolderCAE(in_channels=3, base_channels=16).to(device)
+    model = SolderCAE(in_channels=in_channels, base_channels=base_channels).to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.5, patience=2, min_lr=1e-5)
 
@@ -196,6 +196,10 @@ def train(
                 "best_val_loss": best_val_loss,
                 "val_per_tier": val_per_tier,
                 "history": history,
+                "config": {
+                    "in_channels": in_channels,
+                    "base_channels": base_channels,
+                },
             }, best_ckpt_path)
             print(f"  --> Saved new best checkpoint to {best_ckpt_path} (Val Loss: {best_val_loss:.4f})")
         else:
@@ -233,4 +237,35 @@ def plot_curves(history: Dict[str, List[float]], save_path: Path) -> None:
 
 
 if __name__ == "__main__":
-    train()
+    import argparse
+    from src.config import (
+        DEFAULT_BASE_CHANNELS,
+        DEFAULT_IN_CHANNELS,
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_SYNTHETIC_DATA_DIR,
+    )
+
+    parser = argparse.ArgumentParser(description="Multi-Scale Training Pipeline for SolSight")
+    parser.add_argument("--data-dir", type=str, default=str(DEFAULT_SYNTHETIC_DATA_DIR), help="Path to synthetic dataset")
+    parser.add_argument("--output-dir", type=str, default=str(DEFAULT_OUTPUT_DIR), help="Output directory")
+    parser.add_argument("--epochs", type=int, default=30, help="Max training epochs")
+    parser.add_argument("--batch-size", type=int, default=64, help="Batch size")
+    parser.add_argument("--lr", type=float, default=1e-3, help="Learning rate")
+    parser.add_argument("--patience", type=int, default=5, help="Early stopping patience")
+    parser.add_argument("--in-channels", type=int, default=DEFAULT_IN_CHANNELS, help="Input channels")
+    parser.add_argument("--base-channels", type=int, default=DEFAULT_BASE_CHANNELS, help="Base feature channels")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed")
+    args = parser.parse_args()
+
+    train(
+        data_dir=args.data_dir,
+        output_dir=args.output_dir,
+        max_epochs=args.epochs,
+        batch_size=args.batch_size,
+        lr=args.lr,
+        patience=args.patience,
+        in_channels=args.in_channels,
+        base_channels=args.base_channels,
+        seed=args.seed,
+    )
+

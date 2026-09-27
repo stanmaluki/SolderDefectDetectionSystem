@@ -16,7 +16,7 @@ Unsupervised, resolution-agnostic convolutional autoencoder (CAE) for automatic 
 
 ## Evaluation Guide
 
-Pretrained weights (`outputs/checkpoints/best_cae.pt`) and calibrated thresholds (`outputs/threshold_config.json`) are bundled in the repository.
+Real physical PCBA benchmark data from Kaggle SolDef_AI (`data/real/`) and complete provenance tracking (`data/real/provenance.json`) are bundled in the repository.
 
 ### Setup
 
@@ -24,6 +24,12 @@ Pretrained weights (`outputs/checkpoints/best_cae.pt`) and calibrated thresholds
 git clone https://github.com/stanmaluki/SolderDefectDetectionSystem.git
 cd SolderDefectDetectionSystem
 pip install -r requirements.txt
+
+# To regenerate synthetic training/validation data and train model checkpoint locally:
+python scripts/setup_dirs.py && python src/train.py
+
+# Run automated unit test suite:
+python -m unittest discover tests
 ```
 
 ---

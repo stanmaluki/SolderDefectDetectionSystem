@@ -30,11 +30,10 @@ import math
 import random
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image
 from sklearn.metrics import roc_auc_score
 import torch
 
-from src.model.cae import SolderCAE
+from src.model.cae import load_trained_model
 from src.inference.predict import inspect_patch
 from src.data.synthetic_generator import (
     render_normal_joint,
@@ -273,10 +272,7 @@ def run_full_stress_suite(
         config = json.load(f)
     global_t = config["global_threshold"]
 
-    ckpt = torch.load(checkpoint_path, map_location=device)
-    model = SolderCAE(in_channels=3, base_channels=16).to(device)
-    model.load_state_dict(ckpt["model_state_dict"])
-    model.eval()
+    model, _ = load_trained_model(checkpoint_path, device=device)
 
     out_p = Path(output_dir)
     out_p.mkdir(parents=True, exist_ok=True)
@@ -306,4 +302,21 @@ def run_full_stress_suite(
 
 
 if __name__ == "__main__":
-    run_full_stress_suite()
+    import argparse
+    from src.config import (
+        DEFAULT_CHECKPOINT_PATH,
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_THRESHOLD_CONFIG,
+    )
+
+    parser = argparse.ArgumentParser(description="Stress Testing and Failure Boundary Analysis for SolSight")
+    parser.add_argument("--checkpoint", type=str, default=str(DEFAULT_CHECKPOINT_PATH), help="Path to checkpoint")
+    parser.add_argument("--config", type=str, default=str(DEFAULT_THRESHOLD_CONFIG), help="Threshold config path")
+    parser.add_argument("--output-dir", type=str, default=str(DEFAULT_OUTPUT_DIR / "stress_test"), help="Stress test outputs directory")
+    args = parser.parse_args()
+
+    run_full_stress_suite(
+        checkpoint_path=args.checkpoint,
+        config_path=args.config,
+        output_dir=args.output_dir,
+    )

@@ -77,14 +77,38 @@ Thumbs.db
 *.pt.tmp
 *.pth.tmp
 
-# Large temporary datasets or cache (keep git-tracked synthetic data intact)
+# Large temporary datasets or cache
 data/cache/
 data/downloads/
 data/tmp/
+
+# Procedurally-generated synthetic dataset (regenerate via scripts/generate_synthetic_dataset.py)
+data/synthetic/**/*.png
+data/synthetic/**/*.jpg
+
+# Trained model checkpoints & weights
+outputs/checkpoints/*.pt
+outputs/checkpoints/*.pth
+*.pt
+*.pth
+
+# Generated evaluation plots, metrics, and visualization artifacts
+outputs/*.png
+outputs/*.json
+outputs/demo_visuals/*.png
+outputs/stress_test/
+
+# Preserve directory structures
+!.gitkeep
+!data/synthetic/**/.gitkeep
+!outputs/**/.gitkeep
+
+# Real-world Kaggle benchmark dataset and provenance (always tracked)
+!data/real/
+!data/real/**
 
 # Logs and scratch output
 *.log
 scratch/
 tmp/
 .cache/
-moose/

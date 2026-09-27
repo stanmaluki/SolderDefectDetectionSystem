@@ -33,7 +33,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.model.cae import SolderCAE
+from src.model.cae import load_trained_model
 from src.inference.predict import inspect_patch, create_heatmap_overlay
 
 
@@ -65,10 +65,7 @@ def run_real_world_benchmark(
         raise FileNotFoundError(f"Real normal directory {norm_dir} does not exist. Run scripts/fetch_real_data.py first.")
 
     # Load model
-    model = SolderCAE(in_channels=3, base_channels=16).to(device)
-    ckpt = torch.load(checkpoint_path, map_location=device)
-    model.load_state_dict(ckpt["model_state_dict"])
-    model.eval()
+    model, _ = load_trained_model(checkpoint_path, device=device)
 
     # 1. Evaluate Real Normal Joints
     norm_images = load_patches_from_dir(norm_dir)
@@ -228,4 +225,21 @@ def run_real_world_benchmark(
 
 
 if __name__ == "__main__":
-    run_real_world_benchmark()
+    import argparse
+    from src.config import (
+        DEFAULT_CHECKPOINT_PATH,
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_REAL_DATA_DIR,
+    )
+
+    parser = argparse.ArgumentParser(description="Real-World PCBA Benchmark Evaluation for SolSight")
+    parser.add_argument("--data-dir", type=str, default=str(DEFAULT_REAL_DATA_DIR), help="Path to real PCBA dataset")
+    parser.add_argument("--checkpoint", type=str, default=str(DEFAULT_CHECKPOINT_PATH), help="Path to checkpoint")
+    parser.add_argument("--output-dir", type=str, default=str(DEFAULT_OUTPUT_DIR), help="Output directory")
+    args = parser.parse_args()
+
+    run_real_world_benchmark(
+        data_dir=args.data_dir,
+        checkpoint_path=args.checkpoint,
+        output_dir=args.output_dir,
+    )

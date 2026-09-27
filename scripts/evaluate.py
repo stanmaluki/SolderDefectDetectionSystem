@@ -22,13 +22,13 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 import json
-from typing import Dict, List, Tuple
+from typing import Dict, List
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import roc_auc_score, roc_curve
 import torch
 
-from src.model.cae import SolderCAE
+from src.model.cae import load_trained_model
 from src.inference.predict import inspect_patch
 from src.data.dataset import SolderPatchDataset
 
@@ -117,10 +117,7 @@ def run_full_evaluation(
     print(f"Global Anomaly Threshold T: {global_threshold:.4f} (selected k={config.get('selected_k', 2.5)})")
 
     # Load model
-    ckpt = torch.load(checkpoint_path, map_location=device)
-    model = SolderCAE(in_channels=3, base_channels=16).to(device)
-    model.load_state_dict(ckpt["model_state_dict"])
-    model.eval()
+    model, _ = load_trained_model(checkpoint_path, device=device)
 
     tiers = [16, 32, 64, 128]
     data_base = Path(data_dir)
@@ -194,4 +191,24 @@ def run_full_evaluation(
 
 
 if __name__ == "__main__":
-    run_full_evaluation()
+    import argparse
+    from src.config import (
+        DEFAULT_CHECKPOINT_PATH,
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_SYNTHETIC_DATA_DIR,
+        DEFAULT_THRESHOLD_CONFIG,
+    )
+
+    parser = argparse.ArgumentParser(description="Multi-Scale Benchmark Evaluation for SolSight")
+    parser.add_argument("--checkpoint", type=str, default=str(DEFAULT_CHECKPOINT_PATH), help="Path to checkpoint")
+    parser.add_argument("--config", type=str, default=str(DEFAULT_THRESHOLD_CONFIG), help="Threshold config path")
+    parser.add_argument("--data-dir", type=str, default=str(DEFAULT_SYNTHETIC_DATA_DIR), help="Dataset root")
+    parser.add_argument("--output-dir", type=str, default=str(DEFAULT_OUTPUT_DIR), help="Outputs directory")
+    args = parser.parse_args()
+
+    run_full_evaluation(
+        checkpoint_path=args.checkpoint,
+        config_path=args.config,
+        data_dir=args.data_dir,
+        output_dir=args.output_dir,
+    )

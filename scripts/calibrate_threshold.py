@@ -23,7 +23,7 @@ from typing import Dict, List
 import numpy as np
 import torch
 
-from src.model.cae import SolderCAE
+from src.model.cae import load_trained_model
 from src.inference.predict import inspect_patch
 from src.data.dataset import SolderPatchDataset
 
@@ -42,10 +42,7 @@ def calibrate(
     print("=" * 80)
 
     # Load model
-    ckpt = torch.load(checkpoint_path, map_location=device)
-    model = SolderCAE(in_channels=3, base_channels=16).to(device)
-    model.load_state_dict(ckpt["model_state_dict"])
-    model.eval()
+    model, _ = load_trained_model(checkpoint_path, device=device)
 
     val_base = Path(val_normal_dir)
     trained_tiers = [16, 64, 128]
@@ -141,4 +138,24 @@ def calibrate(
 
 
 if __name__ == "__main__":
-    calibrate()
+    import argparse
+    from src.config import (
+        DEFAULT_CHECKPOINT_PATH,
+        DEFAULT_SYNTHETIC_DATA_DIR,
+        DEFAULT_THRESHOLD_CONFIG,
+        DEFAULT_THRESHOLD_K,
+    )
+
+    parser = argparse.ArgumentParser(description="Calibrate SolSight Anomaly Detection Thresholds")
+    parser.add_argument("--checkpoint", type=str, default=str(DEFAULT_CHECKPOINT_PATH), help="Path to checkpoint")
+    parser.add_argument("--val-dir", type=str, default=str(DEFAULT_SYNTHETIC_DATA_DIR / "val_normal"), help="Normal validation directory")
+    parser.add_argument("--output-config", type=str, default=str(DEFAULT_THRESHOLD_CONFIG), help="Output config path")
+    parser.add_argument("--k", type=float, default=DEFAULT_THRESHOLD_K, help="Standard deviation multiplier k")
+    args = parser.parse_args()
+
+    calibrate(
+        checkpoint_path=args.checkpoint,
+        val_normal_dir=args.val_dir,
+        output_config=args.output_config,
+        selected_k=args.k,
+    )
