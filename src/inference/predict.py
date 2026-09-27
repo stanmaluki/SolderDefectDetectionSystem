@@ -6,8 +6,14 @@ Provides:
 3. Batch and single-image inference supporting arbitrary input resolutions.
 """
 
+import sys
 from pathlib import Path
 from typing import Optional, Tuple, Union
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 import matplotlib
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
@@ -139,3 +145,104 @@ def create_heatmap_overlay(
     # Blend
     blended = Image.blend(base_pil, heat_pil, alpha=alpha)
     return blended
+
+
+def main():
+    import argparse
+    import json
+    from src.model.cae import SolderCAE
+
+    parser = argparse.ArgumentParser(description="SolSight Single-Patch Anomaly Inspection")
+    parser.add_argument("--input", type=str, default=None, help="Path to patch image (png/jpg)")
+    parser.add_argument("--checkpoint", type=str, default="outputs/checkpoints/best_cae.pt", help="Path to model checkpoint")
+    parser.add_argument("--threshold", type=float, default=None, help="Custom anomaly threshold (defaults to calibrated global T)")
+    parser.add_argument("--output", type=str, default="outputs/prediction_result.png", help="Path to save output visual")
+    args = parser.parse_args()
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # Load threshold config
+    thresh = args.threshold
+    if thresh is None:
+        cfg_path = Path("outputs/threshold_config.json")
+        if cfg_path.exists():
+            with open(cfg_path) as f:
+                thresh = json.load(f).get("global_threshold", 0.1300)
+        else:
+            thresh = 0.1300
+
+    # Load model
+    ckpt_path = Path(args.checkpoint)
+    if not ckpt_path.exists():
+        print(f"Error: checkpoint {ckpt_path} not found.")
+        return
+
+    model = SolderCAE(in_channels=3, base_channels=16).to(device)
+    ckpt = torch.load(ckpt_path, map_location=device)
+    model.load_state_dict(ckpt["model_state_dict"])
+    model.eval()
+
+    # Determine input image
+    if args.input:
+        img_path = Path(args.input)
+        if not img_path.exists():
+            print(f"Error: input file {img_path} not found.")
+            return
+        img = Image.open(img_path).convert("RGB")
+    else:
+        sample_candidates = [
+            Path("data/synthetic/val_defect/voids/64px/defect_voids_64px_0000.png"),
+            Path("data/synthetic/val_defect/bridging/64px/defect_bridging_64px_0000.png"),
+            Path("data/synthetic/val_normal/64px/val_normal_64px_0000.png"),
+        ]
+        img_path = next((p for p in sample_candidates if p.exists()), None)
+        if img_path:
+            img = Image.open(img_path).convert("RGB")
+            print(f"No --input specified. Using sample image: {img_path}")
+        else:
+            from src.data.synthetic_generator import render_defect_void
+            img = render_defect_void(64)
+            img_path = Path("synthetic_sample_64px.png")
+            print("No sample found on disk. Rendered on-the-fly 64px void defect patch.")
+
+    # Run inspection
+    res = inspect_patch(model, img, threshold=thresh, device=device)
+    overlay = create_heatmap_overlay(img, res["dssim_map"], alpha=0.55)
+
+    print("\n" + "=" * 60)
+    print("SOLSIGHT SOLDER DEFECT INSPECTION RESULT")
+    print("=" * 60)
+    print(f"Patch Size     : {img.size[0]} x {img.size[1]} px")
+    print(f"Anomaly Score  : {res['anomaly_score']:.4f} (Top-5% DSSIM)")
+    print(f"Threshold (T)  : {thresh:.4f}")
+    verdict = "DEFECT DETECTED [REJECT]" if res['is_anomaly'] else "PASS (NORMAL) [ACCEPT]"
+    print(f"Verdict        : {verdict}")
+    print(f"SSIM Mean      : {res['ssim_mean']:.4f}")
+    print("=" * 60)
+
+    # Save 3-panel figure
+    recon_np = np.clip(res["recon_tensor"][0].permute(1, 2, 0).numpy() * 255.0, 0, 255).astype(np.uint8)
+    recon_img = Image.fromarray(recon_np)
+    fig, axes = plt.subplots(1, 3, figsize=(10, 3.5))
+    axes[0].imshow(img)
+    axes[0].set_title(f"Input ({img.size[0]}x{img.size[1]})")
+    axes[0].axis("off")
+
+    axes[1].imshow(recon_img)
+    axes[1].set_title("CAE Reconstruction")
+    axes[1].axis("off")
+
+    axes[2].imshow(overlay)
+    axes[2].set_title(f"DSSIM Heatmap ({verdict.split()[0]})")
+    axes[2].axis("off")
+
+    out_p = Path(args.output)
+    out_p.parent.mkdir(parents=True, exist_ok=True)
+    plt.tight_layout()
+    plt.savefig(out_p, dpi=150)
+    plt.close()
+    print(f"Saved inspection panel to: {out_p}\n")
+
+
+if __name__ == "__main__":
+    main()
