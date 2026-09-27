@@ -30,7 +30,6 @@ import math
 import random
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image
 from sklearn.metrics import roc_auc_score
 import torch
 

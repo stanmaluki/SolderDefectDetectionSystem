@@ -8,14 +8,13 @@ Provides:
 
 import sys
 from pathlib import Path
-from typing import Optional, Tuple, Union
+from typing import Optional, Union
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 import matplotlib
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
