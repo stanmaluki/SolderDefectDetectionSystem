@@ -4,76 +4,58 @@
 [![PyTorch 2.1+](https://img.shields.io/badge/PyTorch-2.1%2B-ee4c2c.svg)](https://pytorch.org/)
 [![Architecture](https://img.shields.io/badge/Architecture-Fully%20Convolutional%20CAE-green.svg)]()
 [![Scoring](https://img.shields.io/badge/Metric-Top--5%25%20DSSIM-orange.svg)]()
-[![Multi-Scale](https://img.shields.io/badge/Training-Discrete%20Native%20Tiers-purple.svg)]()
 
-> **Unsupervised, resolution-agnostic convolutional autoencoder (CAE) engine for automatic optical inspection (AOI) of solder-joint defects on printed circuit board assemblies (PCBAs).**
+Unsupervised, resolution-agnostic convolutional autoencoder (CAE) for automatic optical inspection (AOI) of solder-joint defects on printed circuit board assemblies (PCBAs).
 
----
-
-## Executive Overview
-
-Traditional PCBA inspection faces three core bottlenecks:
-1. **Defect Scarcity:** Defective joints represent $<0.01\%$ of high-volume manufacturing lines. Supervised classifiers fail from extreme class imbalance.
-2. **Resolution & Optical Zoom Variance:** Different inspection cameras, optical zooms, and pad geometries produce wildly different patch resolutions ($16\text{px}$ to $128\text{px}+$); rigid neural networks require fixed resizing that creates interpolation blur.
-3. **Pixel Averaging Dilution:** Standard Mean Squared Error (MSE) averages anomalies over the entire patch, easily masking small pinholes, voids, or micro-cracks.
-
-**SolSight Solves All Three:**
-- **Unsupervised Anomaly Detection:** Trained **exclusively on defect-free ("golden reference") joints**. Anomalies are detected as structural reconstruction failures.
-- **Resolution-Agnostic Convolutional Engine:** Zero dense layers. Evaluated natively across continuous resolutions ($16\text{px}$ to $160\text{px}$) with zero-shot generalization to untrained scales (e.g. $32\text{px}$).
-- **Spatial Structural Dissimilarity (DSSIM):** Uses custom conv2d-based SSIM maps with a **Top-5% DSSIM scoring metric** to isolate localized anomalies without whole-patch dilution.
+- **Unsupervised:** Trained exclusively on defect-free solder joints; flags defects as structural reconstruction failures.
+- **Resolution-Agnostic:** Fully convolutional architecture (no dense layers) running across $16\text{px}$ to $160\text{px}$ natively.
+- **Localized DSSIM Scoring:** Top-5% spatial structural dissimilarity prevents small pinholes and voids from being diluted by whole-patch averaging.
 
 ---
 
-## ⏱️ Hackathon Judge Guide: 3-Minute Evaluation
+## Evaluation Guide
 
-Everything is pre-configured with pre-trained GPU checkpoints (`outputs/checkpoints/best_cae.pt`) and calibrated thresholds (`outputs/threshold_config.json`). No GPU training is required to evaluate!
+Pretrained weights (`outputs/checkpoints/best_cae.pt`) and calibrated thresholds (`outputs/threshold_config.json`) are bundled in the repository.
 
-### 0. Environment Setup (30 Seconds)
+### Setup
 
 ```bash
 git clone https://github.com/stanmaluki/SolderDefectDetectionSystem.git
 cd SolderDefectDetectionSystem
-
-# Create virtual environment (optional)
-python -m venv .venv
-# Windows: .venv\Scripts\activate | Linux/macOS: source .venv/bin/activate
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
 ---
 
-### Step 1: Architecture & Resolution Sanity Check (10 Seconds)
+### Step 1: Verify Architecture & Resolution Parity
 
-Verify that the model adapts to arbitrary resolutions without dense-layer constraints and dynamically downscales the Gaussian SSIM kernel for small patches:
+Verify that the model dynamically adapts to arbitrary patch dimensions and scales the SSIM window for small patches:
 
 ```bash
 python scripts/shape_check.py
 ```
 
-**Expected Result:**
+Expected output:
 ```
 [PASS] Resolution  15x15  -> Latent: torch.Size([2, 64, 3, 3]), Output: torch.Size([2, 3, 15, 15])
 [PASS] Resolution  16x16  -> Latent: torch.Size([2, 64, 4, 4]), Output: torch.Size([2, 3, 16, 16])
 [PASS] Resolution  32x32  -> Latent: torch.Size([2, 64, 8, 8]), Output: torch.Size([2, 3, 32, 32])
 [PASS] Resolution  64x64  -> Latent: torch.Size([2, 64, 16, 16]), Output: torch.Size([2, 3, 64, 64])
 [PASS] Resolution 128x128 -> Latent: torch.Size([2, 64, 32, 32]), Output: torch.Size([2, 3, 128, 128])
-...
 ALL SHAPE AND CONVOLUTION CHECKS PASSED SUCCESSFULLY!
 ```
 
 ---
 
-### Step 2: Multi-Tier Benchmark Evaluation (30 Seconds)
+### Step 2: Run Benchmark Evaluation
 
-Run the full benchmark across all trained native tiers ($16\text{px}, 64\text{px}, 128\text{px}$) and the **untrained zero-shot generalization tier ($32\text{px}$)**:
+Evaluate the model across all native trained tiers ($16\text{px}, 64\text{px}, 128\text{px}$) and the untrained generalization tier ($32\text{px}$):
 
 ```bash
 python scripts/evaluate.py
 ```
 
-**Expected Result:**
+Expected output:
 ```
 -----------------------------------------------------------------------------------------------
 Tier           | Type         | FPR      | Overall Rec  | Voids    | Bridge   | Cold J   | Amount   | AUROC   
@@ -86,23 +68,22 @@ Tier           | Type         | FPR      | Overall Rec  | Voids    | Bridge   | 
 Saved ROC curves plot to: outputs/roc_curves.png
 Saved evaluation metrics to: outputs/evaluation_metrics.json
 ```
-> **Key Metric Takeaway:** AUROC remains high across all scales ($0.850$ to $0.963$). Cold joints achieve **$96\% - 100\%$ recall** across every tier. Untrained $32\text{px}$ patches achieve **$0.862$ AUROC zero-shot** with no fine-tuning.
 
 ---
 
-### Step 3: Single-Patch Anomaly Inspection & Heatmap (10 Seconds)
+### Step 3: Inspect a Solder Joint Patch
 
-Inspect any joint patch to generate side-by-side reconstruction and DSSIM anomaly heatmaps:
+Run anomaly inference on any patch to generate a side-by-side reconstruction and DSSIM heatmap overlay:
 
 ```bash
-# 1. Run automatic sample inspection:
+# Automatic sample run
 python src/inference/predict.py
 
-# 2. Or test on a specific defect sample (e.g. 128px void):
+# Or inspect a specific defect patch
 python src/inference/predict.py --input outputs/demo_visuals/02_defect_void_128px.png
 ```
 
-**Terminal Output:**
+Expected output:
 ```
 ============================================================
 SOLSIGHT SOLDER DEFECT INSPECTION RESULT
@@ -115,36 +96,24 @@ SSIM Mean      : 0.9114
 ============================================================
 Saved inspection panel to: outputs/prediction_result.png
 ```
-Open [`outputs/prediction_result.png`](outputs/prediction_result.png) to see:
-1. **Original Input Patch**
-2. **CAE Reconstruction** (the autoencoder projects the defect back to golden geometry)
-3. **DSSIM Heatmap Overlay** (bright red pixels isolate the defect region)
+
+Inspection output is saved to `outputs/prediction_result.png`.
 
 ---
 
-### Step 4: Empirical Failure Boundary & Stress Testing (45 Seconds)
+### Step 4: Run Failure Boundary & Stress Suite
 
-Run our automated stress suite to test where the architecture empirically breaks:
+Run the stress test suite to measure where the model empirically breaks:
 
 ```bash
 python scripts/stress_test.py
 ```
 
-**Key Empirical Breaking Points Discovered:**
-1. **Spatial Collapse Floor at $14\text{px}$ (AUROC $0.346$, FPR $100\%$):**  
-   At $14\times14$, the $11\times11$ SSIM window covers $78.5\%$ of the image, causing border padding artifacts to overpower the signal; while stride-2 downsampling ($14\to 7\to 3$) induces dimensional parity mismatch upon upsampling. At $16\text{px}$, the model immediately recovers ($0.932$ AUROC).
-2. **Micro-Defect Footprint Gap:**  
-   Under the multi-tier global threshold ($T=0.1300$), micro-pinholes at $64\text{px}$ ($<1.5\%$ area) score $0.083-0.103$ (well above the $0.055$ normal baseline, but below $0.1300$). Applying resolution-aware thresholding ($T_{64}=0.0773$) detects pinholes down to $0.13\%$ area.
-3. **Sensor Noise Limit ($\sigma \ge 0.02$):**  
-   SSIM false rejects cascade to $100\%$ if sensor noise exceeds $\sigma = 0.02$ ($\text{SNR} \le 34\text{ dB}$).
-   
-*Detailed write-up: [`docs/empirical_breaking_points.md`](docs/empirical_breaking_points.md)*.
+Outputs are saved to `outputs/stress_test/stress_diagnostics.png` and `outputs/stress_test/stress_test_summary.json`.
 
 ---
 
-### Step 5: Interactive Jupyter Notebook Demo (Optional)
-
-For visual, interactive inspection across all defect classes:
+### Step 5: Interactive Demo (Optional)
 
 ```bash
 jupyter notebook notebooks/demo.ipynb
@@ -152,118 +121,81 @@ jupyter notebook notebooks/demo.ipynb
 
 ---
 
-## Benchmark Results Summary
+## Benchmark Results
 
-Model trained on NVIDIA RTX 4000 Ada (30 epochs, 102 seconds, best val loss: $0.0570$):
+Evaluated on held-out test sets across trained and untrained tiers:
 
-| Evaluation Tier | Type | AUROC | Cold Joint Recall | Bridging Recall | Normal Joint FPR |
+| Tier | Type | AUROC | Cold Joint Recall | Bridging Recall | Normal Joint FPR |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **$16 \times 16$** | Trained Native Tier | **0.940** | 96.0% | 84.0% | 10.0% |
 | **$32 \times 32$** | **Untrained Zero-Shot** | **0.862** | 100.0% | 44.0% | 15.0% |
 | **$64 \times 64$** | Trained Native Tier | **0.963** | 100.0% | 90.0%* | 0.0% |
 | **$128 \times 128$**| Trained Native Tier | **0.850** | 100.0% | 88.0%* | 0.0% |
 
-*\*Under resolution-aware threshold $T_r$ configured in `outputs/threshold_config.json`.*
+*\*Under resolution-aware threshold $T_r$ in `outputs/threshold_config.json`.*
 
 ---
 
-## Technical Architecture
+## Empirical Failure Boundaries
+
+| Dimension | Nominal Range | Failure Boundary | Root Cause |
+| :--- | :--- | :--- | :--- |
+| **Spatial Resolution** | $16\text{px}$ to $160\text{px}$ | $\le 14\text{px}$ (AUROC = 0.346) | SSIM window ($11\times11$) exceeds patch size; odd stride-2 downsampling ($14\to 7\to 3$). |
+| **Defect Footprint** | $\ge 1.5\%$ patch area | $< 0.5\%$ (under global $T$) | Single multi-tier threshold ($T=0.130$) is elevated by 16px noise; resolved by per-tier thresholds ($T_{64}=0.077$). |
+| **Sensor Noise** | $\sigma \le 0.01$ ($\text{SNR} \ge 40\text{ dB}$) | $\sigma \ge 0.02$ ($\text{SNR} \le 34\text{ dB}$) | High-frequency sensor noise triggers SSIM contrast penalty against smoothed CAE reconstruction. |
+
+*Detailed write-up: [`docs/empirical_breaking_points.md`](docs/empirical_breaking_points.md).*
+
+---
+
+## Architecture
 
 ```
-                    ┌────────────────────────────────────────┐
-                    │      Input Patch (H x W x 3)           │
-                    │   Resolution-Agnostic (16px to 160px)  │
-                    └───────────────────┬────────────────────┘
-                                        │
-                                        ▼
-             ┌─────────────────────────────────────────────────────┐
-             │ Fully Convolutional Encoder (Conv2D + LeakyReLU)    │
-             │   - Conv 3->16, k=3, s=2 (padding=1)                │
-             │   - Conv 16->32, k=3, s=2 (padding=1)               │
-             │   - Conv 32->64, k=3, s=1 (padding=1)               │
-             └──────────────────────────┬──────────────────────────┘
-                                        │
-                         Latent Tensor (H/4 x W/4 x 64)
-                                        │
-                                        ▼
-             ┌─────────────────────────────────────────────────────┐
-             │ Fully Convolutional Decoder (TransposeConv2D)       │
-             │   - ConvTranspose 64->32, k=3, s=1 (padding=1)      │
-             │   - ConvTranspose 32->16, k=4, s=2 (padding=1)      │
-             │   - ConvTranspose 16->3,  k=4, s=2 (padding=1)      │
-             │   - Sigmoid Activation                              │
-             └──────────────────────────┬──────────────────────────┘
-                                        │
-                                        ▼
-                    ┌────────────────────────────────────────┐
-                    │     Reconstructed Golden Joint         │
-                    └───────────────────┬────────────────────┘
-                                        │
-                                        ▼
-             ┌─────────────────────────────────────────────────────┐
-             │ Spatial SSIM Loss & Top-5% DSSIM Scoring            │
-             │   - Dynamic SSIM Window: min(11, 2*(min_dim//2)-1)  │
-             │   - DSSIM Map = (1 - SSIM_spatial) / 2              │
-             │   - Anomaly Score = Mean(Top 5% highest DSSIM)      │
-             └─────────────────────────────────────────────────────┘
+Patch (H x W x 3) ──► Encoder (3 Conv layers, s=2, s=2, s=1) ──► Latent (H/4 x W/4 x 64)
+                   ──► Decoder (3 ConvTranspose, s=1, s=2, s=2) ──► Reconstruction (H x W x 3)
+                   ──► Spatial DSSIM Map ──► Top-5% Spatial Dissimilarity Score
 ```
 
 ---
 
-## Training From Scratch (Optional)
-
-If you wish to re-generate datasets and retrain the model from scratch:
+## Retraining From Scratch (Optional)
 
 ```bash
-# 1. Generate 5,700 procedural multi-scale patches (train + val)
+# 1. Generate synthetic dataset (5,700 patches)
 python src/data/synthetic_generator.py
 
-# 2. Train CAE multi-scale across {16, 64, 128}px discrete native tiers
+# 2. Train CAE multi-scale across discrete tiers {16, 64, 128}px
 python src/train.py --epochs 30 --batch-size 32 --lr 1e-3
 
-# 3. Calibrate global and resolution-aware thresholds
+# 3. Calibrate thresholds
 python scripts/calibrate_threshold.py --k 2.5
 ```
 
 ---
 
-## Project Structure
+## Repository Structure
 
 ```
 SolderDefectDetectionSystem/
-├── README.md                            # Hackathon judge guide & documentation
-├── requirements.txt                     # Python dependencies
-├── .gitignore                           # Git ignore configuration
+├── README.md                            # Project documentation & evaluation guide
+├── requirements.txt                     # Dependencies
 ├── src/
-│   ├── model/
-│   │   └── cae.py                       # Fully convolutional autoencoder (no dense layers)
-│   ├── loss/
-│   │   └── ssim_loss.py                 # Custom conv2d SSIM map & dynamic kernel sizing
+│   ├── model/cae.py                     # Fully convolutional autoencoder
+│   ├── loss/ssim_loss.py                # SSIM loss and spatial map
 │   ├── data/
-│   │   ├── synthetic_generator.py       # Physics-based ray/phong procedural generator
-│   │   ├── augmentation.py              # AOI-safe geometric & photometric augmentations
-│   │   └── dataset.py                   # Discrete native multi-scale DataLoader
-│   ├── inference/
-│   │   └── predict.py                   # CLI inference & heatmap overlay generator
-│   └── train.py                         # Multi-scale training pipeline with plateau scheduler
+│   │   ├── synthetic_generator.py       # Procedural solder patch generator
+│   │   ├── augmentation.py              # AOI-safe augmentations
+│   │   └── dataset.py                   # Multi-scale DataLoader
+│   ├── inference/predict.py             # Anomaly scoring and heatmap CLI
+│   └── train.py                         # Multi-scale training pipeline
 ├── scripts/
-│   ├── shape_check.py                   # Dynamic window & resolution parity validator
+│   ├── shape_check.py                   # Shape and dynamic window check
 │   ├── calibrate_threshold.py           # Multi-resolution threshold calibration
-│   ├── evaluate.py                      # Multi-tier benchmark & ROC curve generator
-│   └── stress_test.py                   # Automated failure boundary analysis suite
-├── notebooks/
-│   └── demo.ipynb                       # Interactive demonstration notebook
-├── docs/
-│   ├── empirical_breaking_points.md     # Detailed empirical failure analysis report
-│   ├── implementation-plan.md           # Engineering implementation plan (Rev 8)
-│   └── solsight-hackathon-build-spec.md # Technical specification & hackathon brief
-└── outputs/
-    ├── checkpoints/best_cae.pt          # Best trained CAE model weights
-    ├── threshold_config.json            # Calibrated global & per-tier thresholds
-    ├── evaluation_metrics.json          # Benchmark evaluation metrics
-    ├── roc_curves.png                   # Multi-tier ROC curves plot
-    ├── training_curves.png              # Multi-tier loss convergence curves
-    └── stress_test/                     # Stress test diagnostic plots & summary JSON
+│   ├── evaluate.py                      # Multi-tier evaluation and ROC plot
+│   └── stress_test.py                   # Failure boundary stress suite
+├── notebooks/demo.ipynb                 # Interactive demo notebook
+├── docs/                                # Technical specifications and reports
+└── outputs/                             # Checkpoints, metrics, and visual artifacts
 ```
 
 ---
