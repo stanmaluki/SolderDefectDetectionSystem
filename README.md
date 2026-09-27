@@ -27,6 +27,9 @@ pip install -r requirements.txt
 
 # To regenerate synthetic training/validation data and train model checkpoint locally:
 python scripts/setup_dirs.py && python src/train.py
+
+# Run automated unit test suite:
+python -m unittest discover tests
 ```
 
 ---
