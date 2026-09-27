@@ -227,4 +227,17 @@ def setup_real_validation_data(
 
 
 if __name__ == "__main__":
-    setup_real_validation_data()
+    import argparse
+    from src.config import DEFAULT_CROP_SIZE, DEFAULT_REAL_DATA_DIR
+
+    parser = argparse.ArgumentParser(description="Fetch and Curate SolDef_AI Benchmark Dataset")
+    parser.add_argument("--target-dir", type=str, default=str(DEFAULT_REAL_DATA_DIR), help="Output directory for real patches")
+    parser.add_argument("--samples-per-class", type=int, default=50, help="Number of patches per defect/normal class")
+    parser.add_argument("--crop-size", type=int, default=DEFAULT_CROP_SIZE, help="Standardized square crop dimension (px)")
+    args = parser.parse_args()
+
+    setup_real_validation_data(
+        target_dir=args.target_dir,
+        samples_per_class=args.samples_per_class,
+        crop_size=args.crop_size,
+    )

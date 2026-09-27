@@ -208,4 +208,24 @@ def run_demo(
 
 
 if __name__ == "__main__":
-    run_demo()
+    import argparse
+    from src.config import (
+        DEFAULT_CHECKPOINT_PATH,
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_SYNTHETIC_DATA_DIR,
+        DEFAULT_THRESHOLD_CONFIG,
+    )
+
+    parser = argparse.ArgumentParser(description="Generate Exhibition Demo Visuals for SolSight")
+    parser.add_argument("--checkpoint", type=str, default=str(DEFAULT_CHECKPOINT_PATH), help="Path to checkpoint")
+    parser.add_argument("--config", type=str, default=str(DEFAULT_THRESHOLD_CONFIG), help="Threshold config path")
+    parser.add_argument("--data-dir", type=str, default=str(DEFAULT_SYNTHETIC_DATA_DIR), help="Dataset root")
+    parser.add_argument("--output-dir", type=str, default=str(DEFAULT_OUTPUT_DIR / "demo_visuals"), help="Visuals output directory")
+    args = parser.parse_args()
+
+    run_demo(
+        checkpoint_path=args.checkpoint,
+        config_path=args.config,
+        data_dir=args.data_dir,
+        output_dir=args.output_dir,
+    )
