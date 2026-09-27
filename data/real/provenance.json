@@ -1,0 +1,3008 @@
+{
+  "dataset_name": "SolDef_AI: PCB dataset for defect detection",
+  "authors": "Maurizio Calabrese, Gianmauro Fontana, et al.",
+  "kaggle_slug": "mauriziocalabrese/soldef-ai-pcb-dataset-for-defect-detection",
+  "crop_size": 64,
+  "samples": [
+    {
+      "file": "real_no_good_0000.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_30_32_Pro.jpg",
+      "bbox": [
+        602,
+        84,
+        1752,
+        1234
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0001.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_30_42_Pro.jpg",
+      "bbox": [
+        630,
+        75,
+        1786,
+        1231
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0002.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_30_48_Pro.jpg",
+      "bbox": [
+        509,
+        38,
+        1664,
+        1192
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0003.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_30_53_Pro.jpg",
+      "bbox": [
+        667,
+        111,
+        1826,
+        1270
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0000.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_30_57_Pro.jpg",
+      "bbox": [
+        747,
+        640,
+        1168,
+        1061
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0001.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_30_57_Pro.jpg",
+      "bbox": [
+        1331,
+        640,
+        1752,
+        1061
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0004.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_31_01_Pro.jpg",
+      "bbox": [
+        741,
+        264,
+        1894,
+        1417
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0002.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_31_07_Pro.jpg",
+      "bbox": [
+        786,
+        473,
+        1222,
+        909
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0003.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_31_07_Pro.jpg",
+      "bbox": [
+        1360,
+        473,
+        1796,
+        909
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_normal_0004.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_31_21_Pro.jpg",
+      "bbox": [
+        683,
+        622,
+        1106,
+        1046
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0005.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_31_21_Pro.jpg",
+      "bbox": [
+        1265,
+        622,
+        1688,
+        1046
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0005.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_31_29_Pro.jpg",
+      "bbox": [
+        530,
+        283,
+        1682,
+        1436
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0006.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_31_44_Pro.jpg",
+      "bbox": [
+        603,
+        363,
+        1764,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0007.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_31_57_Pro.jpg",
+      "bbox": [
+        874,
+        256,
+        2128,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0008.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_32_09_Pro.jpg",
+      "bbox": [
+        916,
+        211,
+        2123,
+        1417
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0009.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_32_17_Pro.jpg",
+      "bbox": [
+        954,
+        159,
+        2112,
+        1317
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0006.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_32_22_Pro.jpg",
+      "bbox": [
+        975,
+        727,
+        1389,
+        1141
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0007.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_32_22_Pro.jpg",
+      "bbox": [
+        1559,
+        727,
+        1973,
+        1141
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0010.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_32_28_Pro.jpg",
+      "bbox": [
+        906,
+        304,
+        2056,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0008.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_32_34_Pro.jpg",
+      "bbox": [
+        1047,
+        677,
+        1496,
+        1126
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0009.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_32_34_Pro.jpg",
+      "bbox": [
+        1605,
+        677,
+        2054,
+        1126
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0011.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_32_39_Pro.jpg",
+      "bbox": [
+        990,
+        238,
+        2147,
+        1395
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0012.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_32_45_Pro.jpg",
+      "bbox": [
+        954,
+        300,
+        2110,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0010.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_32_52_Pro.jpg",
+      "bbox": [
+        949,
+        751,
+        1389,
+        1192
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0011.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_32_52_Pro.jpg",
+      "bbox": [
+        1510,
+        751,
+        1950,
+        1192
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_normal_0012.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_32_57_Pro.jpg",
+      "bbox": [
+        779,
+        497,
+        1208,
+        927
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0013.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_32_57_Pro.jpg",
+      "bbox": [
+        1362,
+        497,
+        1792,
+        927
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0013.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_58_23_Pro.jpg",
+      "bbox": [
+        659,
+        62,
+        2271,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0014.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_58_30_Pro.jpg",
+      "bbox": [
+        485,
+        81,
+        2097,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0015.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_58_34_Pro.jpg",
+      "bbox": [
+        458,
+        46,
+        2069,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0016.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_58_36_Pro.jpg",
+      "bbox": [
+        472,
+        134,
+        2078,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0017.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_58_39_Pro.jpg",
+      "bbox": [
+        617,
+        97,
+        2227,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0018.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_58_43_Pro.jpg",
+      "bbox": [
+        395,
+        112,
+        2033,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0019.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_58_50_Pro.jpg",
+      "bbox": [
+        412,
+        161,
+        2040,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0020.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_59_17_Pro.jpg",
+      "bbox": [
+        398,
+        107,
+        2008,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0021.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_14_59_26_Pro.jpg",
+      "bbox": [
+        455,
+        48,
+        2099,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0014.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_59_42_Pro.jpg",
+      "bbox": [
+        777,
+        658,
+        1326,
+        1207
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0015.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_14_59_42_Pro.jpg",
+      "bbox": [
+        1641,
+        658,
+        2190,
+        1207
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0022.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_14_35_Pro.jpg",
+      "bbox": [
+        602,
+        182,
+        1804,
+        1384
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0023.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_15_00_Pro.jpg",
+      "bbox": [
+        640,
+        321,
+        1792,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0024.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_15_26_Pro.jpg",
+      "bbox": [
+        532,
+        374,
+        1688,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0025.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_15_36_Pro.jpg",
+      "bbox": [
+        499,
+        284,
+        1686,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0026.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_15_45_Pro.jpg",
+      "bbox": [
+        370,
+        170,
+        1518,
+        1318
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0016.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_03_Pro.jpg",
+      "bbox": [
+        490,
+        505,
+        924,
+        939
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0017.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_03_Pro.jpg",
+      "bbox": [
+        1060,
+        505,
+        1494,
+        939
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_normal_0018.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_08_Pro.jpg",
+      "bbox": [
+        354,
+        558,
+        782,
+        985
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0019.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_08_Pro.jpg",
+      "bbox": [
+        932,
+        558,
+        1360,
+        985
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_normal_0020.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_16_Pro.jpg",
+      "bbox": [
+        300,
+        528,
+        727,
+        955
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0021.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_16_Pro.jpg",
+      "bbox": [
+        876,
+        528,
+        1303,
+        955
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0027.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_17_21_Pro.jpg",
+      "bbox": [
+        291,
+        80,
+        1439,
+        1228
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0028.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_17_27_Pro.jpg",
+      "bbox": [
+        345,
+        19,
+        1521,
+        1195
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0029.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_17_35_Pro.jpg",
+      "bbox": [
+        404,
+        177,
+        1576,
+        1349
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0030.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_17_40_Pro.jpg",
+      "bbox": [
+        424,
+        136,
+        1581,
+        1292
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0022.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_45_Pro.jpg",
+      "bbox": [
+        605,
+        617,
+        1048,
+        1060
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0023.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_45_Pro.jpg",
+      "bbox": [
+        1164,
+        617,
+        1607,
+        1060
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_normal_0024.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_49_Pro.jpg",
+      "bbox": [
+        696,
+        619,
+        1119,
+        1042
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0025.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_49_Pro.jpg",
+      "bbox": [
+        1278,
+        619,
+        1701,
+        1042
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0031.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_17_53_Pro.jpg",
+      "bbox": [
+        725,
+        272,
+        1899,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0026.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_56_Pro.jpg",
+      "bbox": [
+        979,
+        658,
+        1411,
+        1090
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0027.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_17_56_Pro.jpg",
+      "bbox": [
+        1554,
+        658,
+        1986,
+        1090
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0032.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_18_00_Pro.jpg",
+      "bbox": [
+        953,
+        201,
+        2103,
+        1351
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0033.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_18_04_Pro.jpg",
+      "bbox": [
+        946,
+        285,
+        2146,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0028.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_18_08_Pro.jpg",
+      "bbox": [
+        1018,
+        565,
+        1539,
+        1086
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0029.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_18_08_Pro.jpg",
+      "bbox": [
+        1532,
+        565,
+        2052,
+        1086
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0034.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_18_13_Pro.jpg",
+      "bbox": [
+        999,
+        122,
+        2168,
+        1291
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0030.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_22_48_Pro.jpg",
+      "bbox": [
+        770,
+        488,
+        1167,
+        886
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0031.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_22_48_Pro.jpg",
+      "bbox": [
+        1137,
+        488,
+        1535,
+        886
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_normal_0032.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_22_53_Pro.jpg",
+      "bbox": [
+        752,
+        307,
+        1238,
+        793
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0033.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_22_53_Pro.jpg",
+      "bbox": [
+        1113,
+        307,
+        1600,
+        793
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_normal_0034.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_22_57_Pro.jpg",
+      "bbox": [
+        840,
+        512,
+        1234,
+        907
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0035.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_22_57_Pro.jpg",
+      "bbox": [
+        1302,
+        512,
+        1697,
+        907
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0035.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_23_01_Pro.jpg",
+      "bbox": [
+        870,
+        341,
+        1760,
+        1231
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0036.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_23_05_Pro.jpg",
+      "bbox": [
+        819,
+        296,
+        1811,
+        1287
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0036.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_23_09_Pro.jpg",
+      "bbox": [
+        853,
+        669,
+        1251,
+        1068
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0037.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_23_09_Pro.jpg",
+      "bbox": [
+        1249,
+        669,
+        1647,
+        1068
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0037.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_23_13_Pro.jpg",
+      "bbox": [
+        962,
+        393,
+        1878,
+        1309
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0038.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_23_17_Pro.jpg",
+      "bbox": [
+        792,
+        695,
+        1153,
+        1057
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0039.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_23_17_Pro.jpg",
+      "bbox": [
+        1292,
+        695,
+        1654,
+        1057
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0038.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_23_22_Pro.jpg",
+      "bbox": [
+        742,
+        296,
+        1645,
+        1200
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0040.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_23_29_Pro.jpg",
+      "bbox": [
+        812,
+        570,
+        1180,
+        937
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0041.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_23_29_Pro.jpg",
+      "bbox": [
+        1331,
+        570,
+        1699,
+        937
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_normal_0042.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_23_39_Pro.jpg",
+      "bbox": [
+        626,
+        597,
+        1155,
+        1126
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0043.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_23_39_Pro.jpg",
+      "bbox": [
+        1487,
+        597,
+        2016,
+        1126
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_normal_0044.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_24_36_Pro.jpg",
+      "bbox": [
+        679,
+        687,
+        1206,
+        1215
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0045.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_24_36_Pro.jpg",
+      "bbox": [
+        1512,
+        687,
+        2039,
+        1215
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0039.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_24_43_Pro.jpg",
+      "bbox": [
+        686,
+        110,
+        2257,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_normal_0046.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_25_06_Pro.jpg",
+      "bbox": [
+        709,
+        652,
+        1201,
+        1144
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0047.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_25_06_Pro.jpg",
+      "bbox": [
+        1579,
+        652,
+        2071,
+        1144
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_normal_0048.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_25_37_Pro.jpg",
+      "bbox": [
+        752,
+        662,
+        1241,
+        1150
+      ],
+      "original_label": "good_left_terminal"
+    },
+    {
+      "file": "real_normal_0049.png",
+      "class": "normal",
+      "source_image": "WIN_20220329_15_25_37_Pro.jpg",
+      "bbox": [
+        1632,
+        662,
+        2120,
+        1150
+      ],
+      "original_label": "good_right_terminal"
+    },
+    {
+      "file": "real_no_good_0040.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_26_24_Pro.jpg",
+      "bbox": [
+        608,
+        19,
+        2191,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0041.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_27_28_Pro.jpg",
+      "bbox": [
+        644,
+        19,
+        2215,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0042.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_34_58_Pro.jpg",
+      "bbox": [
+        335,
+        155,
+        1462,
+        1281
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0043.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_35_20_Pro.jpg",
+      "bbox": [
+        358,
+        216,
+        1482,
+        1340
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0044.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_35_26_Pro.jpg",
+      "bbox": [
+        652,
+        184,
+        1783,
+        1314
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0045.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_35_32_Pro.jpg",
+      "bbox": [
+        740,
+        286,
+        1857,
+        1403
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0046.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_35_40_Pro.jpg",
+      "bbox": [
+        636,
+        138,
+        1756,
+        1258
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0047.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_36_34_Pro.jpg",
+      "bbox": [
+        732,
+        404,
+        1852,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0048.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_36_56_Pro.jpg",
+      "bbox": [
+        665,
+        379,
+        1800,
+        1440
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_no_good_0049.png",
+      "class": "no_good",
+      "source_image": "WIN_20220329_15_37_02_Pro.jpg",
+      "bbox": [
+        891,
+        195,
+        2010,
+        1315
+      ],
+      "original_label": "no_good"
+    },
+    {
+      "file": "real_exc_solder_0000.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_11_16_Pro.jpg",
+      "bbox": [
+        534,
+        516,
+        927,
+        909
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0001.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_11_16_Pro.jpg",
+      "bbox": [
+        1277,
+        560,
+        1676,
+        959
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0000.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_11_16_Pro.jpg",
+      "bbox": [
+        1395,
+        724,
+        1525,
+        854
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_poor_solder_0000.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_11_29_Pro.jpg",
+      "bbox": [
+        1347,
+        534,
+        1738,
+        925
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0001.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_11_29_Pro.jpg",
+      "bbox": [
+        1468,
+        628,
+        1628,
+        787
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0002.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_11_58_Pro.jpg",
+      "bbox": [
+        1349,
+        511,
+        1754,
+        916
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_poor_solder_0001.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_11_58_Pro.jpg",
+      "bbox": [
+        634,
+        493,
+        999,
+        858
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0002.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_12_12_Pro.jpg",
+      "bbox": [
+        583,
+        570,
+        941,
+        928
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0002.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_13_31_Pro.jpg",
+      "bbox": [
+        1368,
+        496,
+        1821,
+        949
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0003.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_17_14_Pro.jpg",
+      "bbox": [
+        572,
+        478,
+        937,
+        843
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0003.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_17_14_Pro.jpg",
+      "bbox": [
+        1265,
+        525,
+        1692,
+        952
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0003.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_17_51_Pro.jpg",
+      "bbox": [
+        1304,
+        538,
+        1763,
+        998
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0004.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_18_07_Pro.jpg",
+      "bbox": [
+        1399,
+        495,
+        1849,
+        945
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_poor_solder_0004.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_18_32_Pro.jpg",
+      "bbox": [
+        633,
+        434,
+        1065,
+        866
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0005.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_18_32_Pro.jpg",
+      "bbox": [
+        1366,
+        522,
+        1769,
+        925
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0004.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_19_17_Pro.jpg",
+      "bbox": [
+        1559,
+        531,
+        1947,
+        918
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0005.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_20_12_Pro.jpg",
+      "bbox": [
+        695,
+        471,
+        1123,
+        898
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0006.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_20_12_Pro.jpg",
+      "bbox": [
+        1412,
+        491,
+        1868,
+        947
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0005.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_20_23_Pro.jpg",
+      "bbox": [
+        853,
+        414,
+        1237,
+        798
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0007.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_20_23_Pro.jpg",
+      "bbox": [
+        1585,
+        438,
+        1991,
+        844
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0006.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_20_35_Pro.jpg",
+      "bbox": [
+        866,
+        536,
+        1246,
+        917
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0008.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_20_35_Pro.jpg",
+      "bbox": [
+        1598,
+        580,
+        1967,
+        949
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_poor_solder_0006.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_20_47_Pro.jpg",
+      "bbox": [
+        1680,
+        576,
+        2114,
+        1010
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0007.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_20_58_Pro.jpg",
+      "bbox": [
+        1061,
+        567,
+        1451,
+        957
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0008.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_20_58_Pro.jpg",
+      "bbox": [
+        1777,
+        594,
+        2181,
+        998
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0007.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_21_12_Pro.jpg",
+      "bbox": [
+        1017,
+        643,
+        1415,
+        1040
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0009.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_21_12_Pro.jpg",
+      "bbox": [
+        1737,
+        672,
+        2142,
+        1077
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0008.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_21_32_Pro.jpg",
+      "bbox": [
+        1024,
+        505,
+        1464,
+        946
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0009.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_21_32_Pro.jpg",
+      "bbox": [
+        1788,
+        567,
+        2195,
+        975
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0009.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_22_11_Pro.jpg",
+      "bbox": [
+        1623,
+        627,
+        2002,
+        1006
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0010.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_22_28_Pro.jpg",
+      "bbox": [
+        1442,
+        507,
+        1864,
+        929
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_poor_solder_0010.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_22_42_Pro.jpg",
+      "bbox": [
+        917,
+        520,
+        1293,
+        896
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0011.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_22_42_Pro.jpg",
+      "bbox": [
+        1617,
+        557,
+        2021,
+        961
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0010.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_28_00_Pro.jpg",
+      "bbox": [
+        551,
+        409,
+        992,
+        849
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0012.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_28_00_Pro.jpg",
+      "bbox": [
+        1594,
+        490,
+        2036,
+        932
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0011.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_28_00_Pro.jpg",
+      "bbox": [
+        1606,
+        560,
+        1820,
+        774
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_poor_solder_0013.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_28_10_Pro.jpg",
+      "bbox": [
+        1561,
+        468,
+        2034,
+        941
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0011.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_28_10_Pro.jpg",
+      "bbox": [
+        518,
+        406,
+        964,
+        852
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0012.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_28_20_Pro.jpg",
+      "bbox": [
+        1618,
+        648,
+        2063,
+        1092
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0012.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_28_20_Pro.jpg",
+      "bbox": [
+        508,
+        511,
+        1056,
+        1058
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0013.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_28_34_Pro.jpg",
+      "bbox": [
+        1634,
+        600,
+        2104,
+        1070
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0014.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_28_47_Pro.jpg",
+      "bbox": [
+        471,
+        527,
+        947,
+        1002
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0015.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_28_47_Pro.jpg",
+      "bbox": [
+        1544,
+        594,
+        2003,
+        1053
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0013.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_29_21_Pro.jpg",
+      "bbox": [
+        1818,
+        805,
+        1913,
+        900
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0016.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_29_35_Pro.jpg",
+      "bbox": [
+        390,
+        501,
+        903,
+        1014
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0014.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_29_35_Pro.jpg",
+      "bbox": [
+        1440,
+        608,
+        1877,
+        1046
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0015.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_29_53_Pro.jpg",
+      "bbox": [
+        1589,
+        474,
+        2007,
+        893
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0017.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_30_21_Pro.jpg",
+      "bbox": [
+        514,
+        455,
+        966,
+        906
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0016.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_30_21_Pro.jpg",
+      "bbox": [
+        1538,
+        497,
+        2103,
+        1062
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0014.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_30_21_Pro.jpg",
+      "bbox": [
+        1557,
+        549,
+        1744,
+        735
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0018.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_33_34_Pro.jpg",
+      "bbox": [
+        443,
+        479,
+        870,
+        905
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0019.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_33_34_Pro.jpg",
+      "bbox": [
+        1163,
+        518,
+        1641,
+        996
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0015.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_33_34_Pro.jpg",
+      "bbox": [
+        627,
+        537,
+        776,
+        686
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_poor_solder_0017.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_34_05_Pro.jpg",
+      "bbox": [
+        692,
+        522,
+        1072,
+        903
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0016.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_34_05_Pro.jpg",
+      "bbox": [
+        789,
+        582,
+        996,
+        789
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0020.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_34_05_Pro.jpg",
+      "bbox": [
+        1309,
+        545,
+        1799,
+        1035
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0018.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_36_37_Pro.jpg",
+      "bbox": [
+        782,
+        459,
+        1170,
+        846
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0017.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_36_37_Pro.jpg",
+      "bbox": [
+        869,
+        526,
+        1102,
+        759
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_poor_solder_0019.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_37_02_Pro.jpg",
+      "bbox": [
+        1343,
+        473,
+        1814,
+        945
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0021.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_37_25_Pro.jpg",
+      "bbox": [
+        751,
+        431,
+        1171,
+        851
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0022.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_37_25_Pro.jpg",
+      "bbox": [
+        1475,
+        471,
+        1927,
+        923
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0020.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_37_48_Pro.jpg",
+      "bbox": [
+        1438,
+        537,
+        1870,
+        969
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0018.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_38_01_Pro.jpg",
+      "bbox": [
+        926,
+        463,
+        1342,
+        879
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0019.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_38_14_Pro.jpg",
+      "bbox": [
+        922,
+        511,
+        1233,
+        822
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0023.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_38_14_Pro.jpg",
+      "bbox": [
+        1609,
+        556,
+        2028,
+        975
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0021.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_38_24_Pro.jpg",
+      "bbox": [
+        1437,
+        544,
+        1880,
+        986
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0020.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_38_24_Pro.jpg",
+      "bbox": [
+        834,
+        558,
+        1106,
+        830
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0024.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_38_35_Pro.jpg",
+      "bbox": [
+        889,
+        502,
+        1333,
+        946
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0021.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_39_16_Pro.jpg",
+      "bbox": [
+        533,
+        455,
+        973,
+        895
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_poor_solder_0022.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_39_16_Pro.jpg",
+      "bbox": [
+        1381,
+        529,
+        1739,
+        887
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0025.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_39_31_Pro.jpg",
+      "bbox": [
+        1483,
+        549,
+        1955,
+        1020
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0026.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_39_31_Pro.jpg",
+      "bbox": [
+        728,
+        494,
+        1160,
+        926
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0022.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_39_31_Pro.jpg",
+      "bbox": [
+        887,
+        587,
+        1055,
+        755
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0027.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_40_20_Pro.jpg",
+      "bbox": [
+        1401,
+        521,
+        1903,
+        1023
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0028.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_40_20_Pro.jpg",
+      "bbox": [
+        688,
+        496,
+        1113,
+        921
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0023.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_40_20_Pro.jpg",
+      "bbox": [
+        795,
+        593,
+        1011,
+        809
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_poor_solder_0023.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_40_35_Pro.jpg",
+      "bbox": [
+        826,
+        493,
+        1218,
+        884
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0024.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_40_35_Pro.jpg",
+      "bbox": [
+        1501,
+        532,
+        1969,
+        1000
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0025.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_40_52_Pro.jpg",
+      "bbox": [
+        793,
+        507,
+        1267,
+        982
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0026.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_41_05_Pro.jpg",
+      "bbox": [
+        822,
+        627,
+        1225,
+        1030
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0029.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_41_05_Pro.jpg",
+      "bbox": [
+        1499,
+        670,
+        1972,
+        1143
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0030.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_41_16_Pro.jpg",
+      "bbox": [
+        771,
+        495,
+        1218,
+        942
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0031.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_41_16_Pro.jpg",
+      "bbox": [
+        1482,
+        545,
+        1969,
+        1032
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0032.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_41_28_Pro.jpg",
+      "bbox": [
+        661,
+        491,
+        1125,
+        954
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0033.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_41_43_Pro.jpg",
+      "bbox": [
+        1324,
+        451,
+        1771,
+        898
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0027.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_41_43_Pro.jpg",
+      "bbox": [
+        629,
+        398,
+        1024,
+        792
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0028.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_42_25_Pro.jpg",
+      "bbox": [
+        713,
+        540,
+        1104,
+        931
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0029.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_42_25_Pro.jpg",
+      "bbox": [
+        1407,
+        624,
+        1796,
+        1014
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0030.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_48_20_Pro.jpg",
+      "bbox": [
+        505,
+        396,
+        995,
+        886
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0024.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_48_20_Pro.jpg",
+      "bbox": [
+        718,
+        512,
+        950,
+        743
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0034.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_48_20_Pro.jpg",
+      "bbox": [
+        1530,
+        492,
+        2066,
+        1028
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0031.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_48_31_Pro.jpg",
+      "bbox": [
+        556,
+        407,
+        1038,
+        888
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0025.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_13_48_56_Pro.jpg",
+      "bbox": [
+        683,
+        540,
+        880,
+        737
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0035.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_48_56_Pro.jpg",
+      "bbox": [
+        1589,
+        475,
+        2153,
+        1039
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0036.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_49_05_Pro.jpg",
+      "bbox": [
+        1610,
+        578,
+        2129,
+        1098
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0037.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_49_24_Pro.jpg",
+      "bbox": [
+        1553,
+        546,
+        2076,
+        1069
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0032.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_49_35_Pro.jpg",
+      "bbox": [
+        448,
+        407,
+        988,
+        947
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0033.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_49_50_Pro.jpg",
+      "bbox": [
+        529,
+        412,
+        996,
+        879
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0034.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_50_04_Pro.jpg",
+      "bbox": [
+        520,
+        358,
+        1049,
+        887
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0038.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_50_04_Pro.jpg",
+      "bbox": [
+        1495,
+        485,
+        2057,
+        1047
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0035.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_50_17_Pro.jpg",
+      "bbox": [
+        481,
+        459,
+        1003,
+        981
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0036.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_13_50_38_Pro.jpg",
+      "bbox": [
+        726,
+        303,
+        1176,
+        754
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_exc_solder_0039.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_13_50_38_Pro.jpg",
+      "bbox": [
+        1609,
+        374,
+        2129,
+        895
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0026.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_15_56_06_Pro.jpg",
+      "bbox": [
+        1283,
+        411,
+        1772,
+        900
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0040.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_15_56_06_Pro.jpg",
+      "bbox": [
+        487,
+        401,
+        928,
+        843
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_exc_solder_0041.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_15_56_21_Pro.jpg",
+      "bbox": [
+        788,
+        370,
+        1218,
+        799
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0027.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_15_56_21_Pro.jpg",
+      "bbox": [
+        1411,
+        455,
+        1925,
+        969
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0028.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_01_25_Pro.jpg",
+      "bbox": [
+        460,
+        321,
+        904,
+        765
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0029.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_01_25_Pro.jpg",
+      "bbox": [
+        1231,
+        406,
+        1697,
+        872
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0042.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_16_01_50_Pro.jpg",
+      "bbox": [
+        530,
+        436,
+        993,
+        898
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_poor_solder_0037.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_16_01_50_Pro.jpg",
+      "bbox": [
+        1252,
+        494,
+        1734,
+        976
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_spike_0030.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_02_04_Pro.jpg",
+      "bbox": [
+        410,
+        408,
+        785,
+        782
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0031.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_02_04_Pro.jpg",
+      "bbox": [
+        1195,
+        496,
+        1612,
+        914
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0043.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_16_02_29_Pro.jpg",
+      "bbox": [
+        651,
+        426,
+        1106,
+        881
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0032.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_02_29_Pro.jpg",
+      "bbox": [
+        1397,
+        525,
+        1838,
+        965
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0044.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_16_02_46_Pro.jpg",
+      "bbox": [
+        616,
+        423,
+        1046,
+        853
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0033.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_02_46_Pro.jpg",
+      "bbox": [
+        1327,
+        554,
+        1783,
+        1009
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0034.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_02_56_Pro.jpg",
+      "bbox": [
+        622,
+        323,
+        1119,
+        820
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0035.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_02_56_Pro.jpg",
+      "bbox": [
+        1468,
+        527,
+        1894,
+        952
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0045.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_16_03_53_Pro.jpg",
+      "bbox": [
+        395,
+        526,
+        870,
+        1001
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0036.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_03_53_Pro.jpg",
+      "bbox": [
+        1151,
+        523,
+        1652,
+        1025
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0037.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_04_06_Pro.jpg",
+      "bbox": [
+        769,
+        150,
+        1052,
+        434
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0046.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_16_04_06_Pro.jpg",
+      "bbox": [
+        549,
+        293,
+        1021,
+        764
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0038.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_04_06_Pro.jpg",
+      "bbox": [
+        1243,
+        395,
+        1745,
+        897
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0047.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_16_04_28_Pro.jpg",
+      "bbox": [
+        693,
+        519,
+        1197,
+        1023
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0039.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_04_28_Pro.jpg",
+      "bbox": [
+        1582,
+        639,
+        1909,
+        966
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0048.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_16_04_39_Pro.jpg",
+      "bbox": [
+        892,
+        511,
+        1341,
+        961
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0040.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_04_39_Pro.jpg",
+      "bbox": [
+        1555,
+        557,
+        2092,
+        1094
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0041.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_04_53_Pro.jpg",
+      "bbox": [
+        1450,
+        497,
+        1891,
+        938
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_exc_solder_0049.png",
+      "class": "exc_solder",
+      "source_image": "WIN_20220330_16_05_02_Pro.jpg",
+      "bbox": [
+        709,
+        373,
+        1199,
+        863
+      ],
+      "original_label": "exc_solder"
+    },
+    {
+      "file": "real_spike_0042.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_05_02_Pro.jpg",
+      "bbox": [
+        1473,
+        463,
+        1944,
+        934
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0043.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_05_11_Pro.jpg",
+      "bbox": [
+        1539,
+        544,
+        2038,
+        1043
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0044.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_05_22_Pro.jpg",
+      "bbox": [
+        1244,
+        456,
+        1391,
+        603
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0045.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_05_22_Pro.jpg",
+      "bbox": [
+        1690,
+        547,
+        2138,
+        995
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0046.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_05_34_Pro.jpg",
+      "bbox": [
+        880,
+        338,
+        1095,
+        553
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0047.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_05_34_Pro.jpg",
+      "bbox": [
+        1485,
+        463,
+        1868,
+        846
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0048.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_05_47_Pro.jpg",
+      "bbox": [
+        1586,
+        514,
+        2168,
+        1096
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_spike_0049.png",
+      "class": "spike",
+      "source_image": "WIN_20220330_16_06_05_Pro.jpg",
+      "bbox": [
+        1472,
+        448,
+        1995,
+        971
+      ],
+      "original_label": "spike"
+    },
+    {
+      "file": "real_poor_solder_0038.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_16_08_11_Pro.jpg",
+      "bbox": [
+        536,
+        548,
+        819,
+        832
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0039.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_16_15_27_Pro.jpg",
+      "bbox": [
+        973,
+        465,
+        1365,
+        858
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0040.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_16_18_24_Pro.jpg",
+      "bbox": [
+        1462,
+        484,
+        1932,
+        955
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0041.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_16_18_24_Pro.jpg",
+      "bbox": [
+        757,
+        447,
+        1162,
+        853
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0042.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220330_16_18_53_Pro.jpg",
+      "bbox": [
+        1379,
+        433,
+        1835,
+        889
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0043.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220408_13_43_34_Pro.jpg",
+      "bbox": [
+        1771,
+        636,
+        2294,
+        1159
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0044.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220408_14_04_22_Pro.jpg",
+      "bbox": [
+        1502,
+        649,
+        2060,
+        1207
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0045.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220408_14_04_45_Pro.jpg",
+      "bbox": [
+        1703,
+        713,
+        2202,
+        1212
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0046.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220408_14_09_46_Pro_C35.jpg",
+      "bbox": [
+        1397,
+        651,
+        1922,
+        1176
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0047.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220408_14_10_55_Pro.jpg",
+      "bbox": [
+        1432,
+        639,
+        2001,
+        1208
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0048.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220408_14_13_28_Pro.jpg",
+      "bbox": [
+        1303,
+        478,
+        1806,
+        981
+      ],
+      "original_label": "poor_solder"
+    },
+    {
+      "file": "real_poor_solder_0049.png",
+      "class": "poor_solder",
+      "source_image": "WIN_20220408_14_13_49_Pro.jpg",
+      "bbox": [
+        1398,
+        593,
+        1903,
+        1098
+      ],
+      "original_label": "poor_solder"
+    }
+  ]
+}

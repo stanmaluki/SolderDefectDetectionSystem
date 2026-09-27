@@ -1,0 +1,42 @@
+{
+  "dataset_name": "SolDef_AI: PCB dataset for defect detection",
+  "dataset_slug": "mauriziocalabrese/soldef-ai-pcb-dataset-for-defect-detection",
+  "sample_counts": {
+    "normal": 50,
+    "defects_total": 200,
+    "by_class": {
+      "excessive_solder": 50,
+      "insufficient_solder": 50,
+      "solder_spike": 50,
+      "misaligned": 50
+    }
+  },
+  "auroc": 0.8791,
+  "normal_baseline": {
+    "mean": 0.1939705953001976,
+    "std": 0.02235064521183261
+  },
+  "thresholds": {
+    "t_real": 0.23867188572386283,
+    "t_synthetic": 0.13004466619451624
+  },
+  "performance_at_t_real": {
+    "fpr": 0.0,
+    "overall_recall": 0.485,
+    "class_recalls": {
+      "excessive_solder": 0.46,
+      "insufficient_solder": 0.42,
+      "solder_spike": 0.34,
+      "misaligned": 0.72
+    }
+  },
+  "performance_at_t_synthetic": {
+    "overall_recall": 1.0,
+    "class_recalls": {
+      "excessive_solder": 1.0,
+      "insufficient_solder": 1.0,
+      "solder_spike": 1.0,
+      "misaligned": 1.0
+    }
+  }
+}
