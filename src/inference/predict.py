@@ -14,14 +14,20 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import torch
 
+from src.config import (
+    DEFAULT_CHECKPOINT_PATH,
+    DEFAULT_OUTPUT_DIR,
+    DEFAULT_THRESHOLD_CONFIG,
+    FALLBACK_THRESHOLD,
+)
 from src.loss.ssim_loss import ssim_map
 from src.model.cae import load_trained_model
+
 
 
 def compute_top_k_dssim_score(dssim_map: torch.Tensor, top_pct: float = 0.05) -> float:
@@ -133,11 +139,7 @@ def create_heatmap_overlay(
 
     # Colormap transformation on normalized DSSIM map
     norm_map = np.clip(dssim_map, 0.0, 1.0)
-    try:
-        cmap = plt.get_cmap(colormap)
-    except Exception:
-        import matplotlib
-        cmap = matplotlib.colormaps[colormap]
+    cmap = plt.get_cmap(colormap)
     rgba = cmap(norm_map)  # (H, W, 4) in [0, 1]
     heat_rgb = (rgba[..., :3] * 255.0).astype(np.uint8)
     heat_pil = Image.fromarray(heat_rgb)
@@ -150,13 +152,13 @@ def create_heatmap_overlay(
 def main():
     import argparse
     import json
-    from src.model.cae import SolderCAE
+    import warnings
 
     parser = argparse.ArgumentParser(description="SolSight Single-Patch Anomaly Inspection")
     parser.add_argument("--input", type=str, default=None, help="Path to patch image (png/jpg)")
-    parser.add_argument("--checkpoint", type=str, default="outputs/checkpoints/best_cae.pt", help="Path to model checkpoint")
+    parser.add_argument("--checkpoint", type=str, default=str(DEFAULT_CHECKPOINT_PATH), help="Path to model checkpoint")
     parser.add_argument("--threshold", type=float, default=None, help="Custom anomaly threshold (defaults to calibrated global T)")
-    parser.add_argument("--output", type=str, default="outputs/prediction_result.png", help="Path to save output visual")
+    parser.add_argument("--output", type=str, default=str(DEFAULT_OUTPUT_DIR / "prediction_result.png"), help="Path to save output visual")
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -164,12 +166,17 @@ def main():
     # Load threshold config
     thresh = args.threshold
     if thresh is None:
-        cfg_path = Path("outputs/threshold_config.json")
+        cfg_path = Path(DEFAULT_THRESHOLD_CONFIG)
         if cfg_path.exists():
             with open(cfg_path) as f:
-                thresh = json.load(f).get("global_threshold", 0.1300)
-        else:
-            thresh = 0.1300
+                thresh = json.load(f).get("global_threshold")
+        if thresh is None:
+            thresh = FALLBACK_THRESHOLD
+            warnings.warn(
+                f"threshold_config.json not found or missing global_threshold; "
+                f"falling back to uncalibrated threshold {thresh:.4f}."
+            )
+
 
     # Load model
     ckpt_path = Path(args.checkpoint)

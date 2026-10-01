@@ -10,11 +10,13 @@ Supports:
 
 from pathlib import Path
 import random
-from typing import Dict, Iterator, List, Optional, Tuple, Union
+from typing import Dict, Iterator, Optional, Tuple, Union
 from PIL import Image
 import torch
 from torch.utils.data import DataLoader, Dataset
+from src.config import DEFAULT_TRAIN_TIERS
 from src.data.augmentation import SolderAugmentation
+
 
 
 class SolderPatchDataset(Dataset):
@@ -57,7 +59,7 @@ class DiscreteMultiScaleTrainLoader:
     def __init__(
         self,
         base_dir: Union[str, Path],
-        tiers: Tuple[int, ...] = (16, 64, 128),
+        tiers: Tuple[int, ...] = DEFAULT_TRAIN_TIERS,
         batch_size: int = 64,
         steps_per_epoch: Optional[int] = None,
         transform: Optional[SolderAugmentation] = None,

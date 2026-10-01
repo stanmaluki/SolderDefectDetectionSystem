@@ -17,7 +17,8 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 import torch
-from src.model.cae import SolderCAE
+from src.config import DEFAULT_BASE_CHANNELS, DEFAULT_IN_CHANNELS
+from src.model import SolderCAE
 from src.loss.ssim_loss import compute_win_size, ssim_map
 
 
@@ -39,8 +40,9 @@ def run_shape_checks() -> bool:
         (128, 11, "Operational (trained native tier)"),
     ]
 
-    model = SolderCAE(in_channels=3, base_channels=16)
+    model = SolderCAE(in_channels=DEFAULT_IN_CHANNELS, base_channels=DEFAULT_BASE_CHANNELS)
     model.eval()
+
 
     all_passed = True
     print(f"{'Resolution':<12} | {'Input Shape':<16} | {'Output Shape':<16} | {'SSIM Map Shape':<16} | {'Win Size':<9} | {'Win Cov %':<10} | {'Status'}")

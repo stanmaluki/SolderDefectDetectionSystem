@@ -1,4 +1,5 @@
 """Data generation and loading for SolSight."""
+from .augmentation import SolderAugmentation
 from .dataset import (
     DiscreteMultiScaleTrainLoader,
     SolderPatchDataset,
@@ -14,6 +15,7 @@ from .synthetic_generator import (
 )
 
 __all__ = [
+    "SolderAugmentation",
     "DiscreteMultiScaleTrainLoader",
     "SolderPatchDataset",
     "get_fixed_tier_loader",
@@ -24,3 +26,4 @@ __all__ = [
     "render_defect_cold_joint",
     "render_defect_solder_amount",
 ]
+

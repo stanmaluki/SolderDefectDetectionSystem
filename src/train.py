@@ -23,9 +23,17 @@ import numpy as np
 import torch
 import torch.optim as optim
 
+from src.config import (
+    DEFAULT_BASE_CHANNELS,
+    DEFAULT_IN_CHANNELS,
+    DEFAULT_OUTPUT_DIR,
+    DEFAULT_SYNTHETIC_DATA_DIR,
+    DEFAULT_TRAIN_TIERS,
+)
 from src.model.cae import SolderCAE
 from src.loss.ssim_loss import ssim_map
 from src.data.dataset import DiscreteMultiScaleTrainLoader, get_fixed_tier_loader
+
 
 
 def evaluate_tier(model: torch.nn.Module, loader: torch.utils.data.DataLoader, device: torch.device) -> float:
@@ -60,15 +68,15 @@ def evaluate_all_tiers(
 
 
 def train(
-    data_dir: str = "data/synthetic",
-    output_dir: str = "outputs",
+    data_dir: str = str(DEFAULT_SYNTHETIC_DATA_DIR),
+    output_dir: str = str(DEFAULT_OUTPUT_DIR),
     max_epochs: int = 30,
     batch_size: int = 64,
     lr: float = 1e-3,
     patience: int = 5,
     seed: int = 42,
-    in_channels: int = 3,
-    base_channels: int = 16,
+    in_channels: int = DEFAULT_IN_CHANNELS,
+    base_channels: int = DEFAULT_BASE_CHANNELS,
 ) -> None:
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -88,9 +96,10 @@ def train(
     train_dir = Path(data_dir) / "train"
     train_loader = DiscreteMultiScaleTrainLoader(
         base_dir=train_dir,
-        tiers=(16, 64, 128),
+        tiers=DEFAULT_TRAIN_TIERS,
         batch_size=batch_size,
     )
+
 
     val_base = Path(data_dir) / "val_normal"
     val_loaders = {

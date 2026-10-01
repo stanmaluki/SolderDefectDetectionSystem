@@ -33,8 +33,10 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.config import DEFAULT_REAL_THRESHOLD_K, FALLBACK_THRESHOLD
 from src.model.cae import load_trained_model
 from src.inference.predict import inspect_patch, create_heatmap_overlay
+
 
 
 def load_patches_from_dir(directory: Path) -> List[Image.Image]:
@@ -77,15 +79,23 @@ def run_real_world_benchmark(
 
     norm_mean = float(np.mean(norm_scores))
     norm_std = float(np.std(norm_scores))
-    # Calibrate site-specific threshold T_real = mean + 2.0 * std
-    t_real = norm_mean + 2.0 * norm_std
+    # Calibrate site-specific threshold T_real = mean + k * std
+    t_real = norm_mean + DEFAULT_REAL_THRESHOLD_K * norm_std
 
     # Also load the synthetic global threshold for comparison
     cfg_path = Path(output_dir) / "threshold_config.json"
-    t_synthetic = 0.1300
+    t_synthetic = None
     if cfg_path.exists():
         with open(cfg_path) as f:
-            t_synthetic = json.load(f).get("global_threshold", 0.1300)
+            t_synthetic = json.load(f).get("global_threshold")
+    if t_synthetic is None:
+        import warnings
+        t_synthetic = FALLBACK_THRESHOLD
+        warnings.warn(
+            f"threshold_config.json not found or missing global_threshold; "
+            f"using fallback synthetic threshold {t_synthetic:.4f}."
+        )
+
 
     # 2. Evaluate Real Defect Classes
     defect_classes = {

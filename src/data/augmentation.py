@@ -11,10 +11,10 @@ Constraint:
   to eliminate interpolation artifacts.
 """
 
-from typing import Callable
 import torch
 import torchvision.transforms as T
 from PIL import Image
+
 
 
 class SolderAugmentation:

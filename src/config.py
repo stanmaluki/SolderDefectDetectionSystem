@@ -22,5 +22,24 @@ DEFAULT_CROP_SIZE = 64
 # Scoring & Thresholding defaults
 DEFAULT_TOP_K_PCT = 0.05
 DEFAULT_THRESHOLD_K = 2.5
-DEFAULT_SYNTHETIC_GLOBAL_THRESHOLD = 0.1300
 DEFAULT_REAL_THRESHOLD_K = 2.0
+# Deprecated fallback if threshold_config.json is missing (emit warning when used)
+FALLBACK_THRESHOLD = 0.1300
+
+# CAD pipeline directories (Track B)
+DEFAULT_CAD_DIR = PROJECT_ROOT / "data" / "cad"
+DEFAULT_GERBER_DIR = DEFAULT_CAD_DIR / "gerber"
+DEFAULT_CENTROID_DIR = DEFAULT_CAD_DIR / "centroid"
+DEFAULT_FIDUCIAL_DIR = DEFAULT_CAD_DIR / "fiducials"
+DEFAULT_CAD_CROPS_DIR = DEFAULT_OUTPUT_DIR / "cad_crops"
+
+# Registration
+DEFAULT_FIDUCIAL_MIN_COUNT = 3  # Minimum fiducials for homography
+
+# Held-out test split (Track C)
+DEFAULT_TEST_NORMAL_DIR = DEFAULT_SYNTHETIC_DATA_DIR / "test_normal"
+DEFAULT_TEST_DEFECTS_DIR = DEFAULT_SYNTHETIC_DATA_DIR / "test_defects"
+
+# Multi-source real data manifest (Track D)
+DEFAULT_MANIFEST_PATH = DEFAULT_REAL_DATA_DIR / "manifest.json"
+

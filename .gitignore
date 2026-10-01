@@ -102,10 +102,16 @@ outputs/stress_test/
 !.gitkeep
 !data/synthetic/**/.gitkeep
 !outputs/**/.gitkeep
+!data/cad/**/.gitkeep
 
 # Real-world Kaggle benchmark dataset and provenance (always tracked)
 !data/real/
 !data/real/**
+
+# CAD pipeline input/generated assets (track only .gitkeep)
+data/cad/**
+!data/cad/**/.gitkeep
+
 
 # Logs and scratch output
 *.log
