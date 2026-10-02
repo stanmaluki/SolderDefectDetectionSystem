@@ -17,7 +17,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 import time
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -27,12 +27,17 @@ from src.config import (
     DEFAULT_BASE_CHANNELS,
     DEFAULT_IN_CHANNELS,
     DEFAULT_OUTPUT_DIR,
+    DEFAULT_REAL_DATA_DIR,
     DEFAULT_SYNTHETIC_DATA_DIR,
     DEFAULT_TRAIN_TIERS,
 )
 from src.model.cae import SolderCAE
 from src.loss.ssim_loss import ssim_map
-from src.data.dataset import DiscreteMultiScaleTrainLoader, get_fixed_tier_loader
+from src.data.dataset import (
+    DiscreteMultiScaleTrainLoader,
+    SolderPatchDataset,
+    get_fixed_tier_loader,
+)
 
 
 
@@ -77,6 +82,8 @@ def train(
     seed: int = 42,
     in_channels: int = DEFAULT_IN_CHANNELS,
     base_channels: int = DEFAULT_BASE_CHANNELS,
+    include_real_normals: bool = False,
+    real_data_dir: Optional[str] = None,
 ) -> None:
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -84,6 +91,10 @@ def train(
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("=" * 80)
     print(f"SolSight Multi-Scale Training | Device: {device} | Max Epochs: {max_epochs}")
+    if include_real_normals:
+        print("Dataset Mode: HYBRID (Synthetic Multi-Scale + Kaggle Real PCBA Normals)")
+    else:
+        print("Dataset Mode: SYNTHETIC (Multi-Scale Discrete Tiers {16, 64, 128}px)")
     print("=" * 80)
 
     # Output paths
@@ -100,8 +111,23 @@ def train(
         batch_size=batch_size,
     )
 
+    if include_real_normals:
+        real_dir = Path(real_data_dir) if real_data_dir is not None else DEFAULT_REAL_DATA_DIR
+        real_norm_dir = real_dir / "normal"
+        if real_norm_dir.exists():
+            from torch.utils.data import ConcatDataset
+            real_ds = SolderPatchDataset(real_norm_dir, transform=train_loader.transform)
+            if len(real_ds) > 0 and 64 in train_loader.tier_datasets:
+                train_loader.tier_datasets[64] = ConcatDataset([train_loader.tier_datasets[64], real_ds])
+                total_samples = sum(len(ds) for ds in train_loader.tier_datasets.values())
+                train_loader.steps_per_epoch = max(1, total_samples // train_loader.batch_size)
+                print(f"  --> [Hybrid Dataset] Incorporated {len(real_ds)} real normal patches from {real_norm_dir} into 64px training pool.")
+        else:
+            print(f"  --> Warning: Real normal directory {real_norm_dir} not found. Continuing with synthetic only.")
 
-    val_base = Path(data_dir) / "val_normal"
+    val_base = Path(data_dir) / "val_calibration"
+    if not val_base.exists():
+        val_base = Path(data_dir) / "val_normal"
     val_loaders = {
         16: get_fixed_tier_loader(val_base / "16px", batch_size=batch_size, is_train=False),
         64: get_fixed_tier_loader(val_base / "64px", batch_size=batch_size, is_train=False),
@@ -208,6 +234,7 @@ def train(
                 "config": {
                     "in_channels": in_channels,
                     "base_channels": base_channels,
+                    "trained_on_real_normals": include_real_normals,
                 },
             }, best_ckpt_path)
             print(f"  --> Saved new best checkpoint to {best_ckpt_path} (Val Loss: {best_val_loss:.4f})")
@@ -251,6 +278,7 @@ if __name__ == "__main__":
         DEFAULT_BASE_CHANNELS,
         DEFAULT_IN_CHANNELS,
         DEFAULT_OUTPUT_DIR,
+        DEFAULT_REAL_DATA_DIR,
         DEFAULT_SYNTHETIC_DATA_DIR,
     )
 
@@ -264,6 +292,17 @@ if __name__ == "__main__":
     parser.add_argument("--in-channels", type=int, default=DEFAULT_IN_CHANNELS, help="Input channels")
     parser.add_argument("--base-channels", type=int, default=DEFAULT_BASE_CHANNELS, help="Base feature channels")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
+    parser.add_argument(
+        "--include-real-normals",
+        action="store_true",
+        help="Incorporate Kaggle real normal reference solder joints into 64px training pool",
+    )
+    parser.add_argument(
+        "--real-data-dir",
+        type=str,
+        default=str(DEFAULT_REAL_DATA_DIR),
+        help="Path to real PCBA dataset",
+    )
     args = parser.parse_args()
 
     train(
@@ -276,5 +315,7 @@ if __name__ == "__main__":
         in_channels=args.in_channels,
         base_channels=args.base_channels,
         seed=args.seed,
+        include_real_normals=args.include_real_normals,
+        real_data_dir=args.real_data_dir,
     )
 
