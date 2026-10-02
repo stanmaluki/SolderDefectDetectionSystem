@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-02T11:04:04.734536",
+  "base_seed": 42,
+  "splits": {
+    "train": {
+      "role": "model_optimization",
+      "tiers": [
+        16,
+        64,
+        128
+      ],
+      "classes": [
+        "normal"
+      ],
+      "seed_offset": 1000,
+      "sample_count_per_tier": 1500,
+      "directory": "train"
+    },
+    "val_calibration": {
+      "role": "threshold_calibration",
+      "tiers": [
+        16,
+        32,
+        64,
+        128
+      ],
+      "classes": [
+        "normal"
+      ],
+      "seed_offset": 100000,
+      "sample_count_per_tier": 100,
+      "directory": "val_calibration"
+    },
+    "test_heldout": {
+      "role": "held_out_evaluation",
+      "tiers": [
+        16,
+        32,
+        64,
+        128
+      ],
+      "classes": [
+        "normal",
+        "voids",
+        "bridging",
+        "cold_joints",
+        "solder_amount"
+      ],
+      "seed_offset": 200000,
+      "sample_count_normal_per_tier": 100,
+      "sample_count_defect_per_class_tier": 50,
+      "normal_directory": "test_normal",
+      "defects_directory": "test_defects"
+    }
+  },
+  "independence_guarantee": "Strict disjoint random seed offsets (train=+1k, cal=+100k, test_norm=+200k, test_def=+300k) ensure independent pseudorandom sequences with zero data leakage across splits."
+}

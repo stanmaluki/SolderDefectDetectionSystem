@@ -36,10 +36,13 @@ DEFAULT_CAD_CROPS_DIR = DEFAULT_OUTPUT_DIR / "cad_crops"
 # Registration
 DEFAULT_FIDUCIAL_MIN_COUNT = 3  # Minimum fiducials for homography
 
-# Held-out test split (Track C)
+# Held-out test & calibration splits (3-way independent partition)
+DEFAULT_VAL_CALIBRATION_DIR = DEFAULT_SYNTHETIC_DATA_DIR / "val_calibration"
 DEFAULT_TEST_NORMAL_DIR = DEFAULT_SYNTHETIC_DATA_DIR / "test_normal"
 DEFAULT_TEST_DEFECTS_DIR = DEFAULT_SYNTHETIC_DATA_DIR / "test_defects"
+DEFAULT_SPLIT_MANIFEST_PATH = DEFAULT_SYNTHETIC_DATA_DIR / "split_manifest.json"
 
 # Multi-source real data manifest (Track D)
 DEFAULT_MANIFEST_PATH = DEFAULT_REAL_DATA_DIR / "manifest.json"
+
 

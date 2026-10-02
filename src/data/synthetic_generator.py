@@ -11,12 +11,26 @@ Hardened & Multi-Scale Stress Testing Version:
    - solder_amount: severe starving (exposed copper pad) to excessive solder balls.
 """
 
+import datetime
+import hashlib
+import json
 import math
 import random
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
+
+from src.config import (
+    DEFAULT_ALL_TIERS,
+    DEFAULT_SPLIT_MANIFEST_PATH,
+    DEFAULT_SYNTHETIC_DATA_DIR,
+    DEFAULT_TEST_DEFECTS_DIR,
+    DEFAULT_TEST_NORMAL_DIR,
+    DEFAULT_TRAIN_TIERS,
+    DEFAULT_VAL_CALIBRATION_DIR,
+)
+
 
 
 def create_base_pcb(size: int, rng: random.Random) -> np.ndarray:
@@ -344,44 +358,97 @@ def render_defect_solder_amount(
     return Image.fromarray(np.clip(final_img, 0, 255).astype(np.uint8))
 
 
-def generate_dataset_split(
-    target_sizes=(16, 32, 64, 128),
+def generate_three_way_splits(
+    target_sizes: Tuple[int, ...] = DEFAULT_ALL_TIERS,
     train_count_per_tier: int = 1500,
-    val_normal_per_tier: int = 100,
-    val_defect_per_class: int = 50,
+    cal_normal_per_tier: int = 100,
+    test_normal_per_tier: int = 100,
+    test_defect_per_class: int = 50,
     seed: int = 42,
-    base_dir: str = "data/synthetic",
-) -> None:
-    """Generate expanded hardened synthetic dataset across discrete native tiers."""
-    rng = random.Random(seed)
+    base_dir: Union[str, Path] = DEFAULT_SYNTHETIC_DATA_DIR,
+    skip_train_if_exists: bool = True,
+) -> Dict[str, Any]:
+    """Generate independent 3-way synthetic dataset splits with strict seed boundaries.
+
+    Partitions:
+      1. train: Normals only on native trained tiers (16, 64, 128px) for CAE optimization.
+      2. val_calibration: Normals only (16, 32, 64, 128px) for threshold calibration.
+      3. test_heldout: Normals & defects (16, 32, 64, 128px) strictly for held-out evaluation.
+    """
     base = Path(base_dir)
+    train_tiers = [s for s in target_sizes if s in DEFAULT_TRAIN_TIERS]
 
     print("=" * 80)
-    print("Generating Expanded & Hardened Synthetic Dataset (Discrete Native Tiers)")
-    print(f"Train/tier: {train_count_per_tier} | Val normal/tier: {val_normal_per_tier} | Val defects/class: {val_defect_per_class}")
+    print("Generating 3-Way Independent Synthetic Dataset (Train, Calibration, Held-Out Test)")
+    print(f"Base Directory : {base}")
+    print(f"Base Random Seed: {seed}")
+    print(f"Train/tier     : {train_count_per_tier} (tiers: {train_tiers})")
+    print(f"Cal normal/tier: {cal_normal_per_tier} (tiers: {list(target_sizes)})")
+    print(f"Test norm/tier : {test_normal_per_tier} (tiers: {list(target_sizes)})")
+    print(f"Test def/class : {test_defect_per_class} (4 defect classes)")
     print("=" * 80)
 
-    # 1. Training normals: 16px, 64px, 128px (32px is untrained!)
-    train_tiers = [s for s in target_sizes if s != 32]
+    # 1. Train Split (Seed offset: 1,000)
+    train_seed_base = seed + 1000
+    train_generated = 0
     for size in train_tiers:
         train_dir = base / f"train/{size}px"
         train_dir.mkdir(parents=True, exist_ok=True)
-        print(f"Generating {train_count_per_tier} hardened train patches at native {size}px...")
+        existing = list(train_dir.glob("*.png"))
+        if skip_train_if_exists and len(existing) >= train_count_per_tier:
+            print(f"Found {len(existing)} existing train patches at {size}px, skipping generation.")
+            continue
+
+        print(f"Generating {train_count_per_tier} train normal patches at native {size}px...")
+        rng_train = random.Random(train_seed_base + size * 100)
         for i in range(train_count_per_tier):
-            img = render_normal_joint(size, rng, allow_flux_residue=True)
+            img = render_normal_joint(size, rng_train, allow_flux_residue=True)
             img.save(train_dir / f"normal_{size}px_{i:04d}.png")
+            train_generated += 1
 
-    # 2. Validation normals: 16px, 32px (untrained test), 64px, 128px
+    # 2. Calibration Split (Seed offset: 100,000 - strictly disjoint)
+    cal_seed_base = seed + 100000
+    cal_dir_base = base / "val_calibration"
+    val_norm_legacy = base / "val_normal"
+    cal_dir_base.mkdir(parents=True, exist_ok=True)
+    val_norm_legacy.mkdir(parents=True, exist_ok=True)
+
     for size in target_sizes:
-        val_dir = base / f"val_normal/{size}px"
-        val_dir.mkdir(parents=True, exist_ok=True)
-        tier_label = " (untrained test)" if size == 32 else ""
-        print(f"Generating {val_normal_per_tier} val normal patches at native {size}px{tier_label}...")
-        for i in range(val_normal_per_tier):
-            img = render_normal_joint(size, rng, allow_flux_residue=True)
-            img.save(val_dir / f"val_normal_{size}px_{i:04d}.png")
+        tier_cal_dir = cal_dir_base / f"{size}px"
+        tier_cal_dir.mkdir(parents=True, exist_ok=True)
+        tier_legacy_dir = val_norm_legacy / f"{size}px"
+        tier_legacy_dir.mkdir(parents=True, exist_ok=True)
 
-    # 3. Validation defects across 4 classes: 16px, 32px, 64px, 128px
+        print(f"Generating {cal_normal_per_tier} calibration normal patches at {size}px...")
+        rng_cal = random.Random(cal_seed_base + size * 100)
+        for i in range(cal_normal_per_tier):
+            img = render_normal_joint(size, rng_cal, allow_flux_residue=True)
+            img.save(tier_cal_dir / f"cal_normal_{size}px_{i:04d}.png")
+            # Legacy duplicate for existing tools
+            img.save(tier_legacy_dir / f"val_normal_{size}px_{i:04d}.png")
+
+    # 3. Held-Out Test Normal Split (Seed offset: 200,000)
+    test_normal_seed_base = seed + 200000
+    test_norm_dir_base = base / "test_normal"
+    test_norm_dir_base.mkdir(parents=True, exist_ok=True)
+
+    for size in target_sizes:
+        tier_test_norm = test_norm_dir_base / f"{size}px"
+        tier_test_norm.mkdir(parents=True, exist_ok=True)
+
+        print(f"Generating {test_normal_per_tier} held-out test normal patches at {size}px...")
+        rng_test_norm = random.Random(test_normal_seed_base + size * 100)
+        for i in range(test_normal_per_tier):
+            img = render_normal_joint(size, rng_test_norm, allow_flux_residue=True)
+            img.save(tier_test_norm / f"test_normal_{size}px_{i:04d}.png")
+
+    # 4. Held-Out Test Defect Split (Seed offset: 300,000)
+    test_defect_seed_base = seed + 300000
+    test_def_dir_base = base / "test_defects"
+    val_def_legacy = base / "val_defects"
+    test_def_dir_base.mkdir(parents=True, exist_ok=True)
+    val_def_legacy.mkdir(parents=True, exist_ok=True)
+
     defect_renderers = {
         "voids": render_defect_void,
         "bridging": render_defect_bridging,
@@ -389,20 +456,143 @@ def generate_dataset_split(
         "solder_amount": render_defect_solder_amount,
     }
 
-    for dclass, renderer in defect_renderers.items():
+    for d_idx, (dclass, renderer) in enumerate(defect_renderers.items()):
         for size in target_sizes:
-            defect_dir = base / f"val_defects/{dclass}/{size}px"
-            defect_dir.mkdir(parents=True, exist_ok=True)
-            print(f"Generating {val_defect_per_class} {dclass} patches at native {size}px...")
-            for i in range(val_defect_per_class):
-                # Apply varied severity/subtlety to test breakdown limits
-                img = renderer(size, rng)
-                img.save(defect_dir / f"{dclass}_{size}px_{i:04d}.png")
+            d_dir = test_def_dir_base / dclass / f"{size}px"
+            d_dir.mkdir(parents=True, exist_ok=True)
+            legacy_d_dir = val_def_legacy / dclass / f"{size}px"
+            legacy_d_dir.mkdir(parents=True, exist_ok=True)
 
+            print(f"Generating {test_defect_per_class} held-out {dclass} patches at native {size}px...")
+            rng_defect = random.Random(test_defect_seed_base + (d_idx + 1) * 10000 + size * 100)
+            for i in range(test_defect_per_class):
+                img = renderer(size, rng_defect)
+                img.save(d_dir / f"{dclass}_{size}px_{i:04d}.png")
+                # Legacy duplicate for existing tools
+                img.save(legacy_d_dir / f"{dclass}_{size}px_{i:04d}.png")
+
+    # 5. Build and Save Split Manifest
+    manifest = {
+        "schema_version": "1.0",
+        "generated_at": datetime.datetime.now().isoformat(),
+        "base_seed": seed,
+        "splits": {
+            "train": {
+                "role": "model_optimization",
+                "tiers": list(train_tiers),
+                "classes": ["normal"],
+                "seed_offset": 1000,
+                "sample_count_per_tier": train_count_per_tier,
+                "directory": "train",
+            },
+            "val_calibration": {
+                "role": "threshold_calibration",
+                "tiers": list(target_sizes),
+                "classes": ["normal"],
+                "seed_offset": 100000,
+                "sample_count_per_tier": cal_normal_per_tier,
+                "directory": "val_calibration",
+            },
+            "test_heldout": {
+                "role": "held_out_evaluation",
+                "tiers": list(target_sizes),
+                "classes": ["normal", "voids", "bridging", "cold_joints", "solder_amount"],
+                "seed_offset": 200000,
+                "sample_count_normal_per_tier": test_normal_per_tier,
+                "sample_count_defect_per_class_tier": test_defect_per_class,
+                "normal_directory": "test_normal",
+                "defects_directory": "test_defects",
+            },
+        },
+        "independence_guarantee": (
+            "Strict disjoint random seed offsets (train=+1k, cal=+100k, test_norm=+200k, test_def=+300k) "
+            "ensure independent pseudorandom sequences with zero data leakage across splits."
+        ),
+    }
+
+    manifest_path = base / "split_manifest.json"
+    with open(manifest_path, "w") as f:
+        json.dump(manifest, f, indent=2)
+
+    print(f"Saved split manifest to: {manifest_path}")
     print("=" * 80)
-    print("Expanded synthetic dataset generation complete.")
-    print("=" * 80)
+    return manifest
+
+
+def verify_split_independence(base_dir: Union[str, Path] = DEFAULT_SYNTHETIC_DATA_DIR) -> Dict[str, Any]:
+    """Verify that calibration and held-out test splits contain zero duplicate images."""
+    base = Path(base_dir)
+    manifest_path = base / "split_manifest.json"
+
+    if not manifest_path.exists():
+        raise FileNotFoundError(f"Manifest not found: {manifest_path}")
+
+    with open(manifest_path, "r") as f:
+        manifest = json.load(f)
+
+    # Collect hashes
+    split_hashes: Dict[str, Dict[str, str]] = {"val_calibration": {}, "test_normal": {}}
+
+    for split_key, split_dir_name in [("val_calibration", "val_calibration"), ("test_normal", "test_normal")]:
+        split_dir = base / split_dir_name
+        if not split_dir.exists():
+            continue
+        for p in split_dir.rglob("*.png"):
+            h = hashlib.sha256(p.read_bytes()).hexdigest()
+            split_hashes[split_key][str(p.relative_to(base))] = h
+
+    cal_hashes = set(split_hashes["val_calibration"].values())
+    test_hashes = set(split_hashes["test_normal"].values())
+    overlap = cal_hashes.intersection(test_hashes)
+
+    is_independent = (len(overlap) == 0)
+    report = {
+        "is_independent": is_independent,
+        "calibration_samples": len(cal_hashes),
+        "test_normal_samples": len(test_hashes),
+        "hash_collisions": len(overlap),
+    }
+
+    if not is_independent:
+        print(f"WARNING: Found {len(overlap)} duplicate images between calibration and test!")
+    else:
+        print(f"Split Independence Verified: 0 collisions across {len(cal_hashes)} cal and {len(test_hashes)} test images.")
+
+    return report
+
+
+def generate_dataset_split(
+    target_sizes=DEFAULT_ALL_TIERS,
+    train_count_per_tier: int = 1500,
+    val_normal_per_tier: int = 100,
+    val_defect_per_class: int = 50,
+    seed: int = 42,
+    base_dir: str = str(DEFAULT_SYNTHETIC_DATA_DIR),
+) -> None:
+    """Backward-compatible wrapper executing generate_three_way_splits."""
+    generate_three_way_splits(
+        target_sizes=target_sizes,
+        train_count_per_tier=train_count_per_tier,
+        cal_normal_per_tier=val_normal_per_tier,
+        test_normal_per_tier=val_normal_per_tier,
+        test_defect_per_class=val_defect_per_class,
+        seed=seed,
+        base_dir=base_dir,
+    )
 
 
 if __name__ == "__main__":
-    generate_dataset_split()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="SolSight Synthetic Dataset Split Generator")
+    parser.add_argument("--base-dir", type=str, default=str(DEFAULT_SYNTHETIC_DATA_DIR), help="Output base directory")
+    parser.add_argument("--seed", type=int, default=42, help="Base random seed")
+    parser.add_argument("--verify-only", action="store_true", help="Only verify split independence")
+    args = parser.parse_args()
+
+    if args.verify_only:
+        verify_split_independence(args.base_dir)
+    else:
+        generate_three_way_splits(base_dir=args.base_dir, seed=args.seed)
+        verify_split_independence(args.base_dir)
+
