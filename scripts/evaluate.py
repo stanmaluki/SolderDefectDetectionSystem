@@ -21,7 +21,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -38,8 +38,6 @@ from src.config import (
     DEFAULT_CHECKPOINT_PATH,
     DEFAULT_OUTPUT_DIR,
     DEFAULT_SYNTHETIC_DATA_DIR,
-    DEFAULT_TEST_DEFECTS_DIR,
-    DEFAULT_TEST_NORMAL_DIR,
     DEFAULT_THRESHOLD_CONFIG,
     FALLBACK_THRESHOLD,
 )

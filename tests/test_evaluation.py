@@ -80,6 +80,11 @@ class TestEvaluationSuite(unittest.TestCase):
         self.assertGreater(len(pr["precision_curve"]), 0)
         self.assertGreater(len(pr["recall_curve"]), 0)
 
+    def test_compute_operational_review_burden(self):
+        res = compute_operational_review_burden(0.02)
+        self.assertEqual(res["per_1000_joints"], 20.0)
+        self.assertEqual(res["per_10000_joints"], 200.0)
+
 
 if __name__ == "__main__":
     unittest.main()

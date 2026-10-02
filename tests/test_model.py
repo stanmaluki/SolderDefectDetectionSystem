@@ -62,6 +62,10 @@ class TestSolderCAE(unittest.TestCase):
             if tmp_path.exists():
                 tmp_path.unlink()
 
+    def test_utils_import_load_trained_model(self):
+        from src.utils import load_trained_model as utils_load
+        self.assertIs(utils_load, load_trained_model)
+
 
 if __name__ == "__main__":
     unittest.main()

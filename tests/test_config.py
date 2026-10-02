@@ -1,7 +1,6 @@
 """Unit tests for centralized configuration and path resolution."""
 
 import unittest
-from pathlib import Path
 from src.config import (
     DEFAULT_ALL_TIERS,
     DEFAULT_CAD_DIR,
@@ -40,6 +39,11 @@ class TestConfig(unittest.TestCase):
     def test_test_splits_derivation(self):
         self.assertEqual(DEFAULT_TEST_NORMAL_DIR, DEFAULT_SYNTHETIC_DATA_DIR / "test_normal")
         self.assertEqual(DEFAULT_TEST_DEFECTS_DIR, DEFAULT_SYNTHETIC_DATA_DIR / "test_defects")
+
+    def test_default_paths_derivation(self):
+        self.assertEqual(DEFAULT_CHECKPOINT_PATH, DEFAULT_OUTPUT_DIR / "checkpoints" / "best_cae.pt")
+        self.assertEqual(DEFAULT_THRESHOLD_CONFIG, DEFAULT_OUTPUT_DIR / "threshold_config.json")
+        self.assertEqual(DEFAULT_REAL_DATA_DIR, PROJECT_ROOT / "data" / "real")
 
     def test_threshold_fallback_bounds(self):
         self.assertGreater(FALLBACK_THRESHOLD, 0.0)

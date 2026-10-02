@@ -17,18 +17,14 @@ import json
 import math
 import random
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Tuple, Union
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw
 
 from src.config import (
     DEFAULT_ALL_TIERS,
-    DEFAULT_SPLIT_MANIFEST_PATH,
     DEFAULT_SYNTHETIC_DATA_DIR,
-    DEFAULT_TEST_DEFECTS_DIR,
-    DEFAULT_TEST_NORMAL_DIR,
     DEFAULT_TRAIN_TIERS,
-    DEFAULT_VAL_CALIBRATION_DIR,
 )
 
 

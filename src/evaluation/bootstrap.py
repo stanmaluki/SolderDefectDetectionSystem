@@ -1,7 +1,7 @@
 """Uncertainty estimation via stratified and standard bootstrap confidence intervals."""
 
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, Optional, Tuple, Union
+from typing import Callable, Dict, Union
 import numpy as np
 
 
